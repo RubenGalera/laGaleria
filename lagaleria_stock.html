@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>Stock — La Galería</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#111417;--surf:#1a2226;--nav:#22292D;--brd:#2e3a3f;--brd2:#3a4a50;
+  --txt:#f0ece4;--muted:#a8b8bf;--dim:#7a8f96;--faint:#4a5a60;
+  --acc:#C5A669;--acc-bg:rgba(197,166,105,0.12);--acc-bd:rgba(197,166,105,0.35);
+  --red:#cc4444;--red-bg:rgba(180,50,50,0.15);--red-bd:rgba(180,50,50,0.4);
+  --amb:#c89030;--amb-bg:rgba(180,130,0,0.15);--amb-bd:rgba(180,130,0,0.4);
+  --grn:#4a9a5a;--grn-bg:rgba(60,140,70,0.12);--grn-bd:rgba(60,140,70,0.3);
+
+  --sm-text:#5599bb;--sn-text:#4a8a4a;--cm-text:#cc4444;--cn-text:#e07000;
+}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh;padding-bottom:80px}
+
+
+/* EDIT PRODUCT BOTTOM SHEET */
+.edit-sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.edit-sheet-bg.show{display:flex}
+.edit-sheet{background:var(--surf);border-radius:14px;padding:20px;width:100%;max-width:480px;border-top:1px solid var(--brd2);max-height:90vh;overflow-y:auto}
+.edit-sheet-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.edit-sheet-title{font-size:15px;font-weight:700;color:var(--txt)}
+.sheet-cls{background:var(--nav);border:1px solid var(--brd2);border-radius:7px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:18px;line-height:1}
+.edit-fields{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.edit-row{display:flex;gap:8px}
+.edit-row .field{flex:1}
+.btn-del-prod{background:transparent;border:1px solid var(--red-bd);border-radius:10px;padding:12px;font-size:13px;font-weight:700;color:var(--red);cursor:pointer;width:100%;margin-top:4px;transition:all .2s}
+.btn-del-prod:active{background:var(--red-bg)}
+/* make prod name tappable */
+.prod-name{cursor:pointer;transition:color .15s}
+.prod-name:hover{color:var(--acc)}
+/* ONE-OFF ITEM IN PEDIDO */
+.oneoff-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:12px;border:1px dashed var(--acc-bd);border-radius:10px;background:transparent;color:var(--acc);font-size:13px;font-weight:600;cursor:pointer;margin-bottom:14px;transition:all .2s}
+.oneoff-btn:active{background:var(--acc-bg)}
+.oneoff-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 13px;background:rgba(197,166,105,.06);border:1px solid var(--acc-bd);border-radius:9px;margin-bottom:5px}
+.oneoff-name{font-size:13px;font-weight:600;color:var(--acc)}
+.oneoff-meta{font-size:11px;color:var(--dim);margin-top:2px}
+.oneoff-del{background:none;border:none;color:var(--dim);cursor:pointer;font-size:18px;padding:2px 6px;line-height:1}
+.oneoff-del:active{color:var(--red)}
+.oneoff-section-lbl{font-size:10px;font-weight:700;color:var(--acc);letter-spacing:.8px;text-transform:uppercase;padding:12px 0 6px;display:flex;align-items:center;gap:6px}
+.oneoff-section-lbl::before,.oneoff-section-lbl::after{content:"";flex:1;height:1px;background:var(--acc-bd)}
+/* one-off modal */
+.oneoff-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.oneoff-modal-bg.show{display:flex}
+.oneoff-modal{background:var(--surf);border-radius:14px;padding:20px;width:100%;max-width:480px;border-top:1px solid var(--brd2);max-height:90vh;overflow-y:auto}
+
+/* NAV */
+.navbar{background:var(--nav);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.07);position:sticky;top:0;z-index:100}
+.logo-g{display:flex;flex-direction:column;align-items:center;line-height:1}
+.logo-g-neo{font-size:7px;letter-spacing:2.5px;color:var(--acc);text-transform:uppercase;margin-bottom:1px}
+.logo-g-main{font-size:16px;color:var(--acc);font-family:Georgia,serif;letter-spacing:4px}
+.logo-g-deco{display:flex;align-items:center;gap:4px;margin-top:1px}
+.logo-g-line{width:18px;height:.5px;background:rgba(197,166,105,.4)}
+.logo-g-sub{font-size:6px;letter-spacing:2px;color:var(--acc);opacity:.6;text-transform:uppercase}
+
+/* MAIN TABS */
+.main-tabs{display:flex;background:var(--surf);border-bottom:1px solid var(--brd);position:sticky;top:0;z-index:90}
+.mtab.act{color:var(--acc);border-bottom-color:var(--acc)}
+.mtab svg{opacity:.6}
+.mtab.act svg{opacity:1}
+
+/* CATEGORY PILLS — se adaptan al ancho disponible */
+.cat-bar{display:flex;gap:6px;padding:10px 14px;background:var(--bg);border-bottom:1px solid var(--brd)}
+.cpill{display:flex;align-items:center;justify-content:center;gap:4px;padding:6px 8px;border-radius:20px;border:1px solid var(--brd2);font-size:12px;font-weight:600;cursor:pointer;background:var(--surf);color:var(--dim);transition:all .2s;flex:1;min-width:0}
+.cpill:active{opacity:.7}
+.cpill-lbl{display:none;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(min-width:480px){.cpill-lbl{display:inline}}
+.cpill-all{border-color:var(--acc-bd)}
+.cpill-all.act{background:var(--acc);border-color:var(--acc);color:#1a1810}
+.cpill-beb{border-color:rgba(59,130,200,.4);color:#5599cc}
+.cpill-beb.act{background:#0e1e34;border-color:#3b82c8;color:#7ab8f0}
+.cpill-ali{border-color:rgba(74,154,90,.4);color:#5ab870}
+.cpill-ali.act{background:#0e2018;border-color:#4a9a5a;color:#7ad090}
+.cpill-lim{border-color:rgba(80,180,200,.4);color:#60b8cc}
+.cpill-lim.act{background:#0a1e24;border-color:#50b4c8;color:#80d4e8}
+.cpill-mat{border-color:rgba(180,130,50,.4);color:#c89030}
+.cpill-mat.act{background:#1e1408;border-color:#b48232;color:#d4a850}
+
+/* TOOLBAR — espaciado unificado para todas las vistas */
+.toolbar{display:flex;align-items:center;justify-content:space-between;padding:12px 14px}
+.toolbar-right{display:flex;gap:6px}
+.tbtn{padding:7px 12px;border-radius:8px;border:1px solid var(--brd2);font-size:12px;font-weight:600;cursor:pointer;background:var(--surf);color:var(--muted);display:flex;align-items:center;gap:5px;transition:all .2s}
+.tbtn:active{opacity:.7}
+.tbtn.act{background:var(--acc-bg);color:var(--acc);border-color:var(--acc-bd)}
+.inv-status{font-size:11px;color:var(--dim);display:flex;align-items:center;gap:5px}
+.inv-dot{width:7px;height:7px;border-radius:50%;background:var(--faint)}
+.inv-dot.active{background:var(--acc);box-shadow:0 0 6px var(--acc)}
+
+/* INV MODE BANNER */
+
+.inv-banner.show{display:flex}
+.inv-banner-lbl{font-size:12px;color:var(--acc);font-weight:600;display:flex;align-items:center;gap:6px}
+.inv-actions{display:flex;gap:6px}
+.btn-cancel{background:transparent;border:1px solid var(--brd2);border-radius:7px;padding:6px 12px;font-size:12px;color:var(--muted);cursor:pointer;font-weight:600}
+.btn-save{background:var(--acc);border:none;border-radius:7px;padding:6px 14px;font-size:12px;font-weight:700;color:#1a1810;cursor:pointer}
+.btn-save:active{opacity:.85}
+
+/* CONTENT */
+.sec-hdr{display:flex;align-items:center;gap:10px;padding:8px 0 8px}
+.sec-hdr:first-child{padding-top:10px}
+.sec-lbl{font-size:10px;font-weight:700;color:var(--dim);letter-spacing:1.2px;text-transform:uppercase;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.sec-badge{border-radius:20px;font-size:11px;font-weight:700;padding:2px 8px;letter-spacing:0;text-transform:none;display:inline-flex;align-items:center;justify-content:center;min-width:24px}
+.sec-line{flex:1;height:1px;background:var(--brd)}
+.sec-hdr.alert{padding:14px 0 0}
+.sec-hdr.alert .sec-line{background:rgba(180,130,0,.25)}
+
+/* PRODUCT ITEM */
+.prod{display:flex;align-items:center;gap:10px;background:var(--surf);border:1px solid var(--brd);border-radius:10px;padding:10px 12px;margin-bottom:8px;position:relative;overflow:hidden;transition:border-color .2s}
+.prod::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px}
+.prod.red::before{background:var(--red)}
+.prod.amb::before{background:var(--amb)}
+.prod.grn::before{background:var(--grn);opacity:.5}
+.prod.red{border-color:rgba(180,50,50,.25)}
+.prod.amb{border-color:rgba(180,130,0,.25)}
+
+/* sema + icon col */
+.prod-sema-col{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;width:22px}
+.sema{width:9px;height:9px;border-radius:50%}
+.sema.red{background:var(--red);box-shadow:0 0 7px rgba(180,50,50,.6)}
+.sema.amb{background:var(--amb);box-shadow:0 0 7px rgba(180,130,0,.5)}
+.sema.grn{background:var(--grn)}
+.cat-emoji{font-size:14px;line-height:1}
+
+/* prod info */
+.prod-info{flex:1;min-width:0}
+.prod-name{font-size:13px;font-weight:600;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prod-meta{display:flex;align-items:center;gap:5px;margin-top:3px;flex-wrap:wrap}
+.loc-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;flex-shrink:0}
+.loc-g{background:rgba(180,130,0,.15);color:var(--amb);border:1px solid var(--amb-bd)}
+.loc-d{background:rgba(60,140,70,.12);color:var(--grn);border:1px solid var(--grn-bd)}
+.loc-a{background:rgba(100,160,200,.1);color:#7ab8d4;border:1px solid rgba(100,160,200,.3)}
+.prod-min{font-size:10px;color:var(--faint)}
+.prod-note{font-size:10px;color:var(--acc);margin-top:3px;font-style:italic;display:flex;align-items:center;gap:4px}
+
+/* STEPPER */
+.stepper{display:flex;align-items:center;gap:2px;flex-shrink:0}
+.sbtn{width:34px;height:34px;border-radius:8px;border:1px solid var(--brd2);background:var(--nav);color:var(--txt);font-size:22px;font-weight:300;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;transition:all .15s;flex-shrink:0;user-select:none}
+.sbtn:active{background:var(--brd2);transform:scale(.92)}
+
+.sval-num{font-size:15px;font-weight:700;color:var(--txt);display:block;line-height:1.2}
+.prod.red .sval-num{color:var(--red)}
+.prod.amb .sval-num{color:var(--amb)}
+.prod.grn .sval-num{color:var(--grn)}
+.sval-unit{font-size:9px;color:var(--dim);display:block;text-align:center}
+/* inv mode bigger */
+
+
+/* ADD BTN */
+.add-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;border:1px dashed var(--acc-bd);border-radius:10px;background:transparent;color:var(--acc);font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;margin-bottom:4px;transition:all .2s}
+.add-btn:active{background:var(--acc-bg)}
+
+/* PEDIDO */
+.ped-wrap{padding:12px 14px 20px}
+.ped-send{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;border-radius:10px;background:rgba(37,211,102,0.08);border:1.5px solid #25D366;color:#25D366;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:8px;transition:all .2s}
+.ped-send:active{background:rgba(37,211,102,.1)}
+.ped-empty{text-align:center;padding:60px 20px}
+.ped-empty-icon{font-size:42px;margin-bottom:14px}
+.ped-empty-title{font-size:16px;font-weight:700;color:var(--txt);margin-bottom:6px}
+.ped-empty-sub{font-size:13px;color:var(--dim)}
+/* ped-item con misma estructura visual que prod */
+.ped-item{display:flex;align-items:center;gap:10px;background:var(--surf);border:1px solid var(--brd);border-radius:10px;padding:10px 12px;margin-bottom:6px;position:relative;overflow:hidden}
+.ped-item::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px}
+.ped-item.red::before{background:var(--red)}
+.ped-item.amb::before{background:var(--amb)}
+.ped-item.red{border-color:rgba(180,50,50,.25)}
+.ped-item.amb{border-color:rgba(180,130,0,.25)}
+.ped-item-left{flex:1;min-width:0}
+.ped-item-left .ped-name{font-size:13px;font-weight:600;color:var(--txt)}
+.ped-item-left .ped-detail{font-size:11px;color:var(--dim);margin-top:3px}
+.ped-tag{font-size:11px;font-weight:700;padding:5px 10px;border-radius:6px;white-space:nowrap;flex-shrink:0}
+.ped-tag.red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-bd)}
+.ped-tag.amb{background:var(--amb-bg);color:var(--amb);border:1px solid var(--amb-bd)}
+
+/* TAB BADGE — dot sin número */
+.mtab{flex:1;padding:13px 8px;text-align:center;font-size:13px;font-weight:600;color:var(--dim);cursor:pointer;border-bottom:2px solid transparent;min-width:0;overflow:hidden;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;position:relative}
+.tab-badge.show{display:inline-block}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-bg.show{display:flex}
+.modal{background:var(--surf);border-radius:14px;padding:20px;width:100%;max-width:480px;border:1px solid var(--brd2);max-height:90vh;overflow-y:auto}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.modal-title{font-size:15px;font-weight:700;color:var(--txt)}
+.modal-cls{background:var(--nav);border:1px solid var(--brd2);border-radius:7px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:18px;line-height:1}
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.field label{font-size:11px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.5px}
+.inp{background:var(--bg);border:1px solid var(--brd2);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--txt);outline:none;width:100%;transition:border-color .2s}
+.inp:focus{border-color:var(--acc-bd)}
+.inp::placeholder{color:var(--faint)}
+.sel{background:var(--bg);border:1px solid var(--brd2);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--txt);outline:none;width:100%;cursor:pointer}
+.row2{display:flex;gap:8px}
+.row2 .field{flex:1}
+.btn-full{background:var(--acc);border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;color:#1a1810;cursor:pointer;width:100%;margin-top:4px}
+.btn-full:active{opacity:.85}
+
+/* TOAST */
+.toast{position:fixed;bottom:74px;left:50%;transform:translateX(-50%);background:var(--nav);border:1px solid var(--acc-bd);color:var(--acc);padding:8px 18px;border-radius:9px;font-size:12px;font-weight:700;z-index:999;opacity:0;transition:opacity .25s;white-space:nowrap;pointer-events:none}
+.toast.show{opacity:1}
+
+/* REGISTRO */
+.reg-toolbar{display:flex;align-items:center;justify-content:space-between;padding:12px 14px}
+.reg-total-lbl{font-size:12px;color:var(--dim)}
+.reg-list{padding:0 14px 20px}
+.reg-day-card{background:var(--surf);border:1px solid var(--brd);border-radius:10px;margin-bottom:8px;overflow:hidden}
+.reg-day-hdr{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;cursor:pointer;user-select:none}
+.reg-day-date{font-size:13px;font-weight:700;color:var(--txt)}
+.reg-day-meta{display:flex;align-items:center;gap:8px}
+.reg-day-count{font-size:11px;color:var(--dim)}
+.reg-day-chevron{font-size:14px;color:var(--faint);transition:transform .2s;display:inline-block}
+.reg-day-card.open .reg-day-chevron{transform:rotate(90deg)}
+.reg-day-body{display:none;border-top:1px solid var(--brd)}
+.reg-day-card.open .reg-day-body{display:block}
+.reg-person{padding:10px 14px;border-bottom:1px solid var(--brd)}
+.reg-person:last-child{border-bottom:none}
+.reg-person-hdr{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.reg-av{width:30px;height:30px;border-radius:50%;background:var(--acc-bg);border:1px solid var(--acc-bd);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--acc);flex-shrink:0}
+.reg-person-info{flex:1}
+.reg-person-name{font-size:13px;font-weight:600;color:var(--txt)}
+.reg-person-time{font-size:10px;color:var(--dim);margin-top:1px}
+.reg-mov{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.reg-mov:last-child{border-bottom:none}
+.reg-mov-prod{font-size:12px;color:var(--muted)}
+.reg-mov-delta{font-size:12px;font-weight:700}
+.reg-mov-delta.pos{color:var(--grn)}
+.reg-mov-delta.neg{color:var(--red)}
+.reg-mov-delta.blue{color:var(--sm-text)}
+.reg-empty{text-align:center;padding:60px 20px}
+.reg-empty-icon{font-size:36px;margin-bottom:12px}
+.reg-empty-title{font-size:15px;font-weight:700;color:var(--txt);margin-bottom:6px}
+.reg-empty-sub{font-size:12px;color:var(--dim)}
+
+/* tab dot */
+.tab-dot{width:7px;height:7px;border-radius:50%;display:none;margin-left:4px;flex-shrink:0}
+.tab-dot.red{background:#cc4444;box-shadow:0 0 5px rgba(180,50,50,.5);display:inline-block}
+.tab-dot.amb{background:#c89030;box-shadow:0 0 5px rgba(180,130,0,.4);display:inline-block}
+
+
+/* INV UPDATE BUTTON — full width grey at bottom */
+.inv-update-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;border-radius:10px;background:var(--surf);border:1px solid var(--brd2);color:var(--dim);font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;transition:all .2s}
+.inv-update-btn:active{border-color:var(--acc-bd);color:var(--acc)}
+.inv-update-btn.active{background:var(--acc-bg);border-color:var(--acc-bd);color:var(--acc)}
+.inv-last-update{display:flex;align-items:center;justify-content:center;gap:6px;font-size:11px;color:var(--dim);padding:8px 0 4px;margin-bottom:8px}
+
+
+/* INV MODE — blue theme */
+.inv-active .sbtn{background:#5599bb!important;border:none!important;color:#fff!important}
+.inv-active .sval-num{color:var(--sm-text)}
+.inv-banner{background:#1a2f3a;border-top:1px solid rgba(85,153,187,.3);padding:8px 14px;display:none;align-items:center;justify-content:space-between} .inv-banner.show{display:flex}
+.inv-banner-lbl{font-size:12px;color:var(--sm-text);font-weight:600;display:flex;align-items:center;gap:6px}
+.btn-save-inv{background:var(--sm-text);border:none;border-radius:7px;padding:6px 14px;font-size:12px;font-weight:700;color:#fff;cursor:pointer}
+.btn-save-inv:active{opacity:.85}
+.btn-cancel-inv{background:transparent;border:1px solid var(--brd2);border-radius:7px;padding:6px 12px;font-size:12px;color:var(--muted);cursor:pointer;font-weight:600}
+.btn-cancel-inv:active{opacity:.7}
+.inv-update-btn.active{background:rgba(85,153,187,.1);border-color:rgba(85,153,187,.4);color:var(--sm-text)}
+
+.content{padding:0 14px}
+
+.content .sec-hdr:first-child{padding-top:12px}
+
+.sticky-header{position:sticky;top:46px;z-index:89;background:var(--bg)}
+.inv-dot-blue{width:7px;height:7px;border-radius:50%;background:#5599bb;box-shadow:0 0 6px rgba(85,153,187,.6);flex-shrink:0}
+
+
+/* SESSION ORIGIN FEEDBACK */
+.sval{min-width:52px;text-align:center;padding:0 4px;display:flex;flex-direction:column;align-items:center}
+.sval-origin-row{height:14px;display:flex;align-items:center;justify-content:center;gap:3px;overflow:hidden}
+.sval-origin{font-size:10px;color:var(--faint);font-weight:600;line-height:1}
+.sval-arrow{font-size:9px;color:var(--faint);line-height:1}
+
+</style>
+</head>
+<body>
+
+<!-- MAIN TABS -->
+<div class="main-tabs">
+  <div class="mtab act" id="tab-inv" onclick="setTab('inv')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+    Stock
+  </div>
+  <div class="mtab" id="tab-ped" onclick="setTab('ped')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+    Pedido<span class="tab-dot" id="ped-dot"></span>
+  </div>
+  <div class="mtab" id="tab-reg" onclick="setTab('reg')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+    Registro
+  </div>
+</div>
+
+<!-- INVENTARIO -->
+<div id="view-inv">
+
+  <!-- STICKY HEADER: cat-bar + inv-banner -->
+  <div class="sticky-header">
+    <div class="cat-bar">
+    <div class="cpill cpill-all act" onclick="setCat('all',this)">✦ <span class="cpill-lbl">Todo</span></div>
+    <div class="cpill cpill-beb" onclick="setCat('beb',this)">🍺 <span class="cpill-lbl">Bebidas</span></div>
+    <div class="cpill cpill-ali" onclick="setCat('ali',this)">🥩 <span class="cpill-lbl">Alimentación</span></div>
+    <div class="cpill cpill-lim" onclick="setCat('lim',this)">🧴 <span class="cpill-lbl">Limpieza</span></div>
+    <div class="cpill cpill-mat" onclick="setCat('mat',this)">📦 <span class="cpill-lbl">Material</span></div>
+    </div><!-- end cat-bar -->
+    <!-- INV BANNER inside sticky header -->
+    <div class="inv-banner" id="inv-banner">
+      <div class="inv-banner-lbl">
+        <div class="inv-dot-blue"></div>
+        Actualizando inventario
+      </div>
+      <div style="display:flex;gap:6px">
+        <button class="btn-cancel-inv" onclick="cancelInv()">Cancelar</button>
+        <button class="btn-save-inv" onclick="saveInv()">Guardar</button>
+      </div>
+    </div>
+  </div><!-- end sticky-header -->
+
+  <!-- TOOLBAR -->
+
+  <div class="content" id="prod-list"></div>
+
+  <div class="content" style="padding-bottom:14px">
+    <button class="add-btn" onclick="showModal()">+ Añadir producto</button>
+    <button class="inv-update-btn" id="btn-inv" onclick="toggleInv()">☰ Actualizar inventario</button>
+    <div class="inv-last-update">
+      <div class="inv-dot" id="inv-dot"></div>
+      <span id="inv-status-lbl">Último inventario: hoy 08:30</span>
+    </div>
+  </div>
+</div>
+
+<!-- PEDIDO -->
+<div id="view-ped" style="display:none">
+  <div class="ped-wrap" id="ped-content"></div>
+</div>
+
+<!-- REGISTRO -->
+<div id="view-reg" style="display:none">
+  <div class="reg-toolbar">
+    <span id="reg-total-lbl" class="reg-total-lbl"></span>
+    <button class="tbtn" onclick="clearReg()" style="font-size:11px;padding:6px 10px">🗑 Borrar todo</button>
+  </div>
+  <div id="reg-list" class="reg-list"></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal-bg" onclick="if(event.target===this)hideModal()">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div class="modal-title">Nuevo producto</div>
+      <button class="modal-cls" onclick="hideModal()">&#215;</button>
+    </div>
+    <div class="field">
+      <label>Nombre</label>
+      <input class="inp" id="np-n" placeholder="Cerveza Estrella, Aceite AOVE...">
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>Categoría</label>
+        <select class="sel" id="np-c">
+          <option value="beb">🍺 Bebidas</option>
+          <option value="ali">🥩 Alimentación</option>
+          <option value="lim">🧴 Limpieza</option>
+          <option value="mat">📦 Material</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Ubicación</label>
+        <select class="sel" id="np-l">
+          <option value="d">Despensa</option>
+          <option value="g">Garaje</option>
+          <option value="a">Ambos</option>
+        </select>
+      </div>
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>Cantidad actual</label>
+        <input class="inp" id="np-q" type="number" min="0" placeholder="0">
+      </div>
+      <div class="field">
+        <label>Unidad</label>
+        <input class="inp" id="np-u" placeholder="bot, kg, caja...">
+      </div>
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>Mínimo alerta</label>
+        <input class="inp" id="np-m" type="number" min="0" placeholder="0">
+      </div>
+      <div class="field">
+        <label>Nota</label>
+        <input class="inp" id="np-no" placeholder="Nevera pequeña...">
+      </div>
+    </div>
+    <button class="btn-full" onclick="addProd()">Añadir producto</button>
+  </div>
+</div>
+
+
+<!-- EDIT PRODUCT SHEET -->
+<div class="edit-sheet-bg" id="edit-sheet-bg" onclick="if(event.target===this)closeEditSheet()">
+  <div class="edit-sheet">
+    <div class="edit-sheet-hdr">
+      <div class="edit-sheet-title" id="edit-sheet-title">Editar producto</div>
+      <div class="sheet-cls" onclick="closeEditSheet()">&#215;</div>
+    </div>
+    <div class="edit-fields">
+      <div class="field">
+        <label>Nombre</label>
+        <input class="inp" id="ep-n" placeholder="Nombre del producto">
+      </div>
+      <div class="edit-row">
+        <div class="field">
+          <label>Categoría</label>
+          <select class="sel" id="ep-c">
+            <option value="beb">🍺 Bebidas</option>
+            <option value="ali">🥩 Alimentación</option>
+            <option value="lim">🧴 Limpieza</option>
+            <option value="mat">📦 Material</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Ubicación</label>
+          <select class="sel" id="ep-l">
+            <option value="d">Despensa</option>
+            <option value="g">Garaje</option>
+            <option value="a">Ambos</option>
+          </select>
+        </div>
+      </div>
+      <div class="edit-row">
+        <div class="field">
+          <label>Cantidad mínima</label>
+          <input class="inp" id="ep-m" type="number" min="0">
+        </div>
+        <div class="field">
+          <label>Unidad</label>
+          <input class="inp" id="ep-u" placeholder="bot, kg...">
+        </div>
+      </div>
+      <div class="field">
+        <label>Nota</label>
+        <input class="inp" id="ep-no" placeholder="Nevera pequeña, 4 abajo...">
+      </div>
+    </div>
+    <button class="btn-full" onclick="saveEditProd()">Guardar cambios</button>
+    <button class="btn-del-prod" onclick="deleteProd()">🗑 Eliminar producto del inventario</button>
+  </div>
+</div>
+
+<!-- ONE-OFF MODAL -->
+<div class="oneoff-modal-bg" id="oneoff-modal-bg" onclick="if(event.target===this)closeOneoffModal()">
+  <div class="oneoff-modal">
+    <div class="edit-sheet-hdr">
+      <div class="edit-sheet-title">Añadir al pedido</div>
+      <div class="sheet-cls" onclick="closeOneoffModal()">&#215;</div>
+    </div>
+    <p style="font-size:12px;color:var(--dim);margin-bottom:14px;line-height:1.5">Producto puntual — no se guarda en el inventario. Se incluye solo en este pedido.</p>
+    <div class="field" style="margin-bottom:10px">
+      <label>Nombre</label>
+      <input class="inp" id="oo-n" placeholder="Balletas de colores, escoba...">
+    </div>
+    <div class="edit-row" style="margin-bottom:14px">
+      <div class="field">
+        <label>Cantidad</label>
+        <input class="inp" id="oo-q" type="number" min="1" placeholder="1">
+      </div>
+      <div class="field">
+        <label>Unidad</label>
+        <input class="inp" id="oo-u" placeholder="ud, caja, pak...">
+      </div>
+    </div>
+    <button class="btn-full" onclick="addOneoff()">Añadir al pedido</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const CATS={
+  beb:{label:"Bebidas",icon:"🍺"},
+  ali:{label:"Alimentación",icon:"🥩"},
+  lim:{label:"Limpieza",icon:"🧴"},
+  mat:{label:"Material",icon:"📦"},
+};
+const LOCS={g:"Garaje",d:"Despensa",a:"Ambos"};
+const LOC_CLS={g:"loc-g",d:"loc-d",a:"loc-a"};
+
+let curCat="all",invMode=false,nid=100,curTab="inv",editId=null,oneoffs=[];
+
+/* ── REGISTRO ── */
+// Estructura: [{date:"2026-05-18", movements:[{prodId, prodName, delta, who, ts}]}]
+let registro=[];
+
+function todayKey(){
+  const d=new Date();
+  return d.toISOString().split("T")[0]; // "2026-05-18"
+}
+function formatDateLabel(key){
+  const d=new Date(key+"T12:00:00");
+  const hoy=todayKey();
+  const ayer=new Date();ayer.setDate(ayer.getDate()-1);
+  const ayerKey=ayer.toISOString().split("T")[0];
+  if(key===hoy)return"Hoy — "+d.toLocaleDateString("es-ES",{day:"numeric",month:"long"});
+  if(key===ayerKey)return"Ayer — "+d.toLocaleDateString("es-ES",{day:"numeric",month:"long"});
+  return d.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"});
+}
+function initials(name){
+  if(!name)return"?";
+  return name.trim().split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2);
+}
+
+function logMovement(prodId,prodName,delta,who,fromInv){
+  const key=todayKey();
+  // Always log to the normal (non-actualizacion) entry for today
+  let day=registro.find(d=>d.date===key&&!d.isActualizacion);
+  if(!day){day={date:key,open:true,isActualizacion:false,movements:[]};registro.unshift(day);}
+  const ts=new Date().toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit"});
+  const existing=day.movements.find(m=>m.prodId===prodId&&m.who===(who||"Sin nombre")&&!!m._fromInv===!!fromInv);
+  if(existing){existing.delta+=delta;existing.ts=ts;}
+  else day.movements.push({prodId,prodName,delta,who:who||"Sin nombre",ts,_fromInv:!!fromInv});
+}
+
+function renderReg(){
+  const list=document.getElementById("reg-list");
+  const total=registro.filter(d=>!d.isActualizacion).reduce((s,d)=>s+d.movements.length,0);
+  document.getElementById("reg-total-lbl").textContent=
+    total?`${total} movimiento${total!==1?"s":""} registrado${total!==1?"s":""}`:"Sin movimientos aún";
+
+  if(!registro.length){
+    list.innerHTML=`<div class="reg-empty">
+      <div class="reg-empty-icon">📋</div>
+      <div class="reg-empty-title">Sin movimientos</div>
+      <div class="reg-empty-sub">Los ajustes de stock aparecerán aquí agrupados por día.</div>
+    </div>`;
+    return;
+  }
+
+  list.innerHTML=registro.map((day,di)=>{
+    // Agrupar movimientos por persona
+    const byWho={};
+    day.movements.forEach(m=>{
+      if(!byWho[m.who])byWho[m.who]={name:m.who,movs:[],lastTs:m.ts};
+      // Acumular deltas del mismo producto
+      const existing=byWho[m.who].movs.find(x=>x.prodId===m.prodId);
+      if(existing){existing.delta+=m.delta;existing.ts=m.ts;}
+      else byWho[m.who].movs.push({...m});
+      byWho[m.who].lastTs=m.ts;
+    });
+
+    const personasHTML=Object.values(byWho).map(p=>`
+      <div class="reg-person">
+        <div class="reg-person-hdr">
+          <div class="reg-av">${initials(p.name)}</div>
+          <div class="reg-person-info">
+            <div class="reg-person-name">${p.name}</div>
+            <div class="reg-person-time">Última actividad: ${p.lastTs}</div>
+          </div>
+        </div>
+        ${p.movs.filter(m=>m.delta!==0).map(m=>`
+          <div class="reg-mov">
+            <span class="reg-mov-prod">${m.prodName}</span>
+            <span class="reg-mov-delta ${day.isActualizacion?"blue":m.delta>0?"pos":"neg"}">${m.delta>0?"+":""}${m.delta} ${prods.find(x=>x.id===m.prodId)?.unit||"ud"}</span>
+          </div>`).join("")}
+      </div>`).join("");
+
+    const isOpen=day.open!==false;
+    const count=day.movements.length;
+    return`<div class="reg-day-card${isOpen?" open":""}" id="reg-day-${di}">
+      <div class="reg-day-hdr" onclick="toggleRegDay(${di})">
+        <span class="reg-day-date">${formatDateLabel(day.date)}</span>
+        <div class="reg-day-meta">
+          ${day.isActualizacion
+            ? '<span style="font-size:12px;font-weight:700;color:var(--sm-text)">Actualización de Stock</span>'
+            : `<span class="reg-day-count">${count} movimiento${count!==1?"s":""}</span>`}
+          <span class="reg-day-chevron">›</span>
+        </div>
+      </div>
+      <div class="reg-day-body">${personasHTML}</div>
+    </div>`;
+  }).join("");
+}
+
+function toggleRegDay(di){
+  registro[di].open=!registro[di].open;
+  const card=document.getElementById("reg-day-"+di);
+  card.classList.toggle("open",registro[di].open);
+}
+
+function updatePedBadge(){
+  const n=prods.filter(p=>sc(p)!=="grn").length;
+  const b=document.getElementById("ped-badge");
+  if(b){b.textContent=n;b.classList.toggle("show",n>0);}
+}
+
+function clearReg(){
+  if(!registro.length){toast("No hay registros");return;}
+  const hoy=todayKey();
+  const diaHoy=registro.find(d=>d.date===hoy);
+  if(!diaHoy||!diaHoy.movements.length){toast("Sin movimientos hoy");return;}
+  if(!confirm("¿Borrar los registros de hoy?"))return;
+  registro=registro.filter(d=>d.date!==hoy);
+  renderReg();toast("Registros de hoy borrados");
+}
+let prods=[
+  {id:1,name:"Cerveza Estrella",cat:"beb",loc:"a",qty:8,min:24,unit:"bot",note:"Nevera grande barra"},
+  {id:2,name:"Vino tinto Arrocal",cat:"beb",loc:"g",qty:36,min:12,unit:"bot",note:""},
+  {id:3,name:"Agua mineral 1.5L",cat:"beb",loc:"d",qty:48,min:24,unit:"bot",note:""},
+  {id:4,name:"Refresco Coca-Cola",cat:"beb",loc:"d",qty:4,min:12,unit:"caja",note:"Quedan 2 abiertas"},
+  {id:5,name:"Cerveza sin alcohol",cat:"beb",loc:"d",qty:6,min:12,unit:"bot",note:""},
+  {id:6,name:"Pollo entero",cat:"ali",loc:"g",qty:3,min:5,unit:"kg",note:"4 bolsas abajo, 2 arriba"},
+  {id:7,name:"Aceite AOVE",cat:"ali",loc:"d",qty:2,min:4,unit:"bot",note:""},
+  {id:8,name:"Patatas fritas",cat:"ali",loc:"d",qty:8,min:6,unit:"bol",note:""},
+  {id:9,name:"Jamón ibérico",cat:"ali",loc:"g",qty:1,min:2,unit:"pza",note:"Cortador en barra"},
+  {id:10,name:"Lejía",cat:"lim",loc:"d",qty:1,min:3,unit:"bot",note:""},
+  {id:11,name:"Lavavajillas",cat:"lim",loc:"d",qty:3,min:2,unit:"bot",note:""},
+  {id:12,name:"Papel cocina",cat:"lim",loc:"d",qty:4,min:6,unit:"rol",note:""},
+  {id:13,name:"Servilletas",cat:"mat",loc:"d",qty:12,min:8,unit:"pak",note:""},
+  {id:14,name:"Vasos desechables",cat:"mat",loc:"g",qty:2,min:4,unit:"pak",note:""},
+  {id:15,name:"Bolsas basura",cat:"mat",loc:"d",qty:3,min:3,unit:"rol",note:""},
+];
+
+function sc(p){
+  if(p.qty<=0)return"red";
+  if(p.qty<p.min*0.5)return"red";
+  if(p.qty<p.min)return"amb";
+  return"grn";
+}
+
+function updPedDot(){
+  const needed=prods.filter(p=>sc(p)!=='grn');
+  const dot=document.getElementById('ped-dot');
+  if(!dot) return;
+  const hasRed=needed.some(p=>sc(p)==='red');
+  dot.className='tab-dot'+(hasRed?' red':needed.length?' amb':'');
+}
+function setTab(t){
+  if(t!=="inv" && invMode) cancelInv();
+  _origin={};  // clear session feedback on tab change
+  curTab=t;
+  ["inv","ped","reg"].forEach(x=>{
+    document.getElementById("tab-"+x).classList.toggle("act",x===t);
+    document.getElementById("view-"+x).style.display=x===t?"":"none";
+  });
+  if(t==="ped"){renderPed();updPedDot();}
+  if(t==="reg")renderReg();
+}
+
+function setCat(c,el){
+  _origin={};  // clear feedback on filter change
+  curCat=c;
+  document.querySelectorAll(".cpill").forEach(p=>p.classList.remove("act"));
+  el.classList.add("act");
+  render();
+}
+
+function toggleInv(){
+  invMode=!invMode;
+  document.getElementById("inv-banner").classList.toggle("show",invMode);
+  const bi=document.getElementById("btn-inv");if(bi)bi.classList.toggle("active",invMode);
+  const id=document.getElementById("inv-dot");if(id)id.classList.toggle("active",invMode);
+  // Apply blue theme to all steppers
+  const vi=document.getElementById("view-inv");if(vi)vi.classList.toggle("inv-active",invMode);
+  render();
+}
+function cancelInv(){
+  invMode=false;
+  const banner=document.getElementById("inv-banner");if(banner)banner.classList.remove("show");
+  const bi=document.getElementById("btn-inv");if(bi)bi.classList.remove("active");
+  const id=document.getElementById("inv-dot");if(id)id.classList.remove("active");
+  const vi=document.getElementById("view-inv");if(vi)vi.classList.remove("inv-active");
+  render();
+}
+function saveInv(){
+  const now=new Date();
+  const timeStr=now.getHours().toString().padStart(2,"0")+":"+now.getMinutes().toString().padStart(2,"0");
+  const lbl=document.getElementById("inv-status-lbl");
+  if(lbl) lbl.textContent="Último inventario: hoy "+timeStr;
+  // Upsert: if today already has an actualizacion entry, update it; else create new
+  const key=todayKey();
+  const todayEntry=registro.find(d=>d.date===key&&!d.isActualizacion);
+  // Collect inv movements from today
+  const invMovs=todayEntry?todayEntry.movements.filter(m=>m._fromInv):[];
+  if(todayEntry) todayEntry.movements=todayEntry.movements.filter(m=>!m._fromInv);
+  // Find existing actualizacion for today (same user session)
+  let actualizacionEntry=registro.find(d=>d.date===key&&d.isActualizacion);
+  if(actualizacionEntry){
+    // Merge movements into existing entry
+    invMovs.forEach(m=>{
+      const ex=actualizacionEntry.movements.find(x=>x.prodId===m.prodId);
+      if(ex) ex.delta+=m.delta;
+      else actualizacionEntry.movements.push(m);
+    });
+  } else {
+    actualizacionEntry={date:key,open:true,isActualizacion:true,movements:invMovs};
+    registro.unshift(actualizacionEntry);
+  }
+  cancelInv();
+  if(typeof renderReg==="function") renderReg();
+  toast("Inventario actualizado ✓");
+}
+
+function render(){
+  const list=document.getElementById("prod-list");
+  list.innerHTML="";
+
+  // Dynamic alert count for current filter
+  const alertProds = curCat==="all"
+    ? prods.filter(p=>sc(p)!=="grn")
+    : prods.filter(p=>p.cat===curCat&&sc(p)!=="grn");
+  if(alertProds.length){
+    list.appendChild(secHdr("⚠ Necesitas reponer",alertProds.length,true));
+  }
+
+  if(curCat==="all"){
+    // All categories — products stay in their zone, red/amb first within each
+    Object.entries(CATS).forEach(([cat,info])=>{
+      const ps=prods.filter(p=>p.cat===cat);
+      if(!ps.length)return;
+      list.appendChild(secHdr(info.icon+" "+info.label,null,false));
+      ps.forEach(p=>list.appendChild(prodEl(p)));
+    });
+  } else {
+    const ps=prods.filter(p=>p.cat===curCat);
+    const cat=CATS[curCat];
+    list.appendChild(secHdr(cat.icon+" "+cat.label,null,false));
+    ps.forEach(p=>list.appendChild(prodEl(p)));
+  }
+
+  updatePedBadge();
+}
+
+function secHdr(label,count,isAlert){
+  const d=document.createElement("div");
+  d.className="sec-hdr"+(isAlert?" alert":"");
+  let lnClr="var(--brd)", lblClr="", badgeSt="";
+  if(isAlert){
+    const hasRed=prods.some(p=>sc(p)==="red");
+    const c=hasRed?"180,50,50":"180,130,0";
+    const cv=hasRed?"var(--red)":"var(--amb)";
+    lnClr=`rgba(${c},.4)`;
+    lblClr=`color:${cv}`;
+    badgeSt=`background:rgba(${c},.2);border:1px solid rgba(${c},.5);color:${cv}`;
+  }
+  d.innerHTML=`
+    <div class="sec-line" style="background:${lnClr}"></div>
+    <div class="sec-lbl" style="${lblClr}">
+      ${label}${count!==null?`<span class="sec-badge" style="${badgeSt}">${count}</span>`:""}
+    </div>
+    <div class="sec-line" style="background:${lnClr}"></div>`;
+  return d;
+}
+
+function prodEl(p){
+  const s=sc(p);
+  const cat=CATS[p.cat];
+  const d=document.createElement("div");
+  d.className=`prod ${s}`;
+  d.innerHTML=`
+    <div class="prod-sema-col">
+      <div class="sema ${s}"></div>
+      <span class="cat-emoji">${cat.icon}</span>
+    </div>
+    <div class="prod-info">
+      <div class="prod-name" onclick="openEditSheet(${p.id})">${p.name} <span style="font-size:10px;color:var(--faint)">✎</span></div>
+      <div class="prod-meta">
+        <span class="loc-badge ${LOC_CLS[p.loc]}">${LOCS[p.loc]}</span>
+        <span class="prod-min">mín. ${p.min} ${p.unit}</span>
+      </div>
+      ${p.note?`<div class="prod-note">💬 ${p.note}</div>`:""}
+    </div>
+    <div class="stepper">
+      <button class="sbtn" onclick="adj(${p.id},-1)">−</button>
+      <div class="sval">
+        <div class="sval-origin-row">
+          ${_origin[p.id]!==undefined&&_origin[p.id]!==p.qty
+            ? `<span class="sval-origin">${_origin[p.id]}</span>`
+            : ""}
+        </div>
+        <span class="sval-num">${p.qty}</span>
+        <span class="sval-unit">${p.unit}</span>
+      </div>
+      <button class="sbtn" onclick="adj(${p.id},1)">+</button>
+    </div>`;
+  return d;
+}
+
+var _origin={};   // original qty before first edit this session
+var _originTimer={}; // auto-clear timers per product
+
+function adj(id,delta){
+  const p=prods.find(x=>x.id===id);
+  if(!p)return;
+  // Clear origin for ALL other products when tapping a new one
+  Object.keys(_origin).forEach(k=>{ if(parseInt(k)!==id){ clearTimeout(_originTimer[k]); delete _origin[k]; } });
+  if(_origin[id]===undefined) _origin[id]=p.qty;
+  p.qty=Math.max(0,p.qty+delta);
+  clearTimeout(_originTimer[id]);
+  _originTimer[id]=setTimeout(()=>{
+    delete _origin[id];
+    render();
+  },3000);
+  logMovement(p.id,p.name,delta,null,invMode);
+  render();
+  updPedDot();
+}
+
+function renderPed(){
+  const wrap=document.getElementById("ped-content");
+  const needed=prods.filter(p=>sc(p)!=="grn");
+  const hasContent=needed.length||oneoffs.length;
+
+  let html=`<button class="ped-send" onclick="sendWA()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Enviar pedido por WhatsApp
+  </button>
+  <button class="add-btn" style="margin-top:0;margin-bottom:16px" onclick="openOneoffModal()">+ Añadir producto puntual</button>`;
+
+  if(!hasContent){
+    html+=`<div class="ped-empty">
+      <div class="ped-empty-icon">✅</div>
+      <div class="ped-empty-title">¡Todo en orden!</div>
+      <div class="ped-empty-sub">No hay productos bajo mínimos.<br>Puedes añadir productos puntuales arriba.</div>
+    </div>`;
+    wrap.innerHTML=html;return;
+  }
+
+  /* one-offs */
+  if(oneoffs.length){
+    html+=`<div class="oneoff-section-lbl">Productos puntuales</div>`;
+    oneoffs.forEach(o=>{
+      html+=`<div class="oneoff-item">
+        <div>
+          <div class="oneoff-name">${o.name}</div>
+          <div class="oneoff-meta">Pedir: ${o.qty} ${o.unit} · No se guarda en inventario</div>
+        </div>
+        <button class="oneoff-del" onclick="removeOneoff(${o.id})">&#215;</button>
+      </div>`;
+    });
+  }
+
+  /* recurrentes por cat */
+  if(needed.length){
+    Object.entries(CATS).forEach(([cat,info])=>{
+      const ps=needed.filter(p=>p.cat===cat);
+      if(!ps.length)return;
+      html+=`<div class="sec-hdr"><div class="sec-line"></div><div class="sec-lbl">${info.icon} ${info.label}</div><div class="sec-line"></div></div>`;
+      ps.forEach(p=>{
+        const s=sc(p);const need=Math.max(1,p.min-p.qty);
+        html+=`<div class="ped-item ${s}">
+          <div class="ped-item-left">
+            <div class="ped-name">${p.name}</div>
+            <div class="ped-detail">Tienes ${p.qty} ${p.unit} · mín. ${p.min} · ${LOCS[p.loc]}</div>
+          </div>
+          <span class="ped-tag ${s}">+${need} ${p.unit}</span>
+        </div>`;
+      });
+    });
+  }
+  wrap.innerHTML=html;
+}
+
+function sendWA(){
+  const needed=prods.filter(p=>sc(p)!=="grn");
+  let msg="🍷 *Pedido La Galería*\n\n";
+  if(oneoffs.length){
+    msg+="*✦ Productos puntuales*\n";
+    oneoffs.forEach(o=>msg+=`• ${o.name}: ${o.qty} ${o.unit}\n`);
+    msg+="\n";
+  }
+  Object.entries(CATS).forEach(([cat,info])=>{
+    const ps=needed.filter(p=>p.cat===cat);
+    if(!ps.length)return;
+    msg+=`*${info.icon} ${info.label}*\n`;
+    ps.forEach(p=>{const need=Math.max(1,p.min-p.qty);msg+=`• ${p.name}: ${need} ${p.unit}\n`;});
+    msg+="\n";
+  });
+  window.open("https://wa.me/?text="+encodeURIComponent(msg));
+}
+
+function showModal(){
+  // Pre-select current category if not "all"
+  if(curCat!=="all"){
+    document.getElementById("np-c").value=curCat;
+  }
+  document.getElementById("modal-bg").classList.add("show");
+  document.getElementById("np-n").focus();
+}
+function hideModal(){document.getElementById("modal-bg").classList.remove("show");}
+function addProd(){
+  const name=document.getElementById("np-n").value.trim();
+  if(!name){document.getElementById("np-n").focus();return;}
+  prods.push({id:nid++,name,cat:document.getElementById("np-c").value,loc:document.getElementById("np-l").value,qty:parseInt(document.getElementById("np-q").value)||0,unit:document.getElementById("np-u").value||"ud",min:parseInt(document.getElementById("np-m").value)||0,note:document.getElementById("np-no").value.trim()});
+  hideModal();render();toast("Producto añadido ✓");
+  ["np-n","np-q","np-u","np-m","np-no"].forEach(id=>document.getElementById(id).value="");
+}
+
+/* ── EDIT PRODUCT ── */
+function openEditSheet(id){
+  editId=id;
+  const p=prods.find(x=>x.id===id);if(!p)return;
+  document.getElementById("edit-sheet-title").textContent=p.name;
+  document.getElementById("ep-n").value=p.name;
+  document.getElementById("ep-c").value=p.cat;
+  document.getElementById("ep-l").value=p.loc;
+  document.getElementById("ep-m").value=p.min;
+  document.getElementById("ep-u").value=p.unit;
+  document.getElementById("ep-no").value=p.note||"";
+  document.getElementById("edit-sheet-bg").classList.add("show");
+}
+function closeEditSheet(){
+  document.getElementById("edit-sheet-bg").classList.remove("show");
+  editId=null;
+}
+function saveEditProd(){
+  const p=prods.find(x=>x.id===editId);if(!p)return;
+  p.name=document.getElementById("ep-n").value.trim()||p.name;
+  p.cat=document.getElementById("ep-c").value;
+  p.loc=document.getElementById("ep-l").value;
+  p.min=parseInt(document.getElementById("ep-m").value)||0;
+  p.unit=document.getElementById("ep-u").value||p.unit;
+  p.note=document.getElementById("ep-no").value.trim();
+  closeEditSheet();render();toast("Producto actualizado ✓");
+}
+function deleteProd(){
+  if(!editId)return;
+  const p=prods.find(x=>x.id===editId);if(!p)return;
+  document.getElementById("confirm-del-name").textContent=p.name;
+  document.getElementById("confirm-del-bg").classList.add("show");
+}
+function closeConfirmDel(){
+  document.getElementById("confirm-del-bg").classList.remove("show");
+}
+function confirmDelProd(){
+  prods=prods.filter(x=>x.id!==editId);
+  closeConfirmDel();
+  closeEditSheet();
+  render();
+  toast("Producto eliminado");
+}
+
+/* ── ONE-OFF ── */
+function openOneoffModal(){document.getElementById("oneoff-modal-bg").classList.add("show");document.getElementById("oo-n").focus();}
+function closeOneoffModal(){document.getElementById("oneoff-modal-bg").classList.remove("show");}
+function addOneoff(){
+  const name=document.getElementById("oo-n").value.trim();if(!name)return;
+  const qty=parseInt(document.getElementById("oo-q").value)||1;
+  const unit=document.getElementById("oo-u").value.trim()||"ud";
+  oneoffs.push({id:nid++,name,qty,unit});
+  closeOneoffModal();renderPed();toast("Añadido al pedido ✓");
+  ["oo-n","oo-q","oo-u"].forEach(id=>document.getElementById(id).value="");
+}
+function removeOneoff(id){
+  oneoffs=oneoffs.filter(x=>x.id!==id);
+  renderPed();
+}
+
+function toast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg;t.classList.add("show");
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),2400);
+}
+
+// Datos de ejemplo para el registro
+const hoy=todayKey();
+const ayerEx=new Date();ayerEx.setDate(ayerEx.getDate()-1);
+const ayerKey=ayerEx.toISOString().split("T")[0];
+registro=[
+  {date:hoy,open:true,movements:[
+    {prodId:7,prodName:"Aceite AOVE",delta:-1,who:"Rubén García",ts:"11:32"},
+    {prodId:6,prodName:"Pollo entero",delta:-2,who:"Rubén García",ts:"11:32"},
+    {prodId:3,prodName:"Agua mineral 1.5L",delta:12,who:"Rubén García",ts:"11:35"},
+    {prodId:4,prodName:"Refresco Coca-Cola",delta:-1,who:"María Alonso",ts:"09:15"},
+    {prodId:1,prodName:"Cerveza Estrella",delta:-6,who:"María Alonso",ts:"09:15"},
+  ]},
+  {date:ayerKey,open:false,movements:[
+    {prodId:2,prodName:"Vino tinto Arrocal",delta:12,who:"Rubén García",ts:"10:00"},
+    {prodId:10,prodName:"Lejía",delta:2,who:"Rubén García",ts:"10:05"},
+    {prodId:13,prodName:"Servilletas",delta:-3,who:"Jorge López",ts:"21:30"},
+  ]},
+];
+
+render();
+updPedDot();
+
+</script>
+
+<!-- CONFIRM DELETE MODAL -->
+<div class="modal-bg" id="confirm-del-bg" onclick="if(event.target===this)closeConfirmDel()">
+  <div class="modal" style="max-width:320px">
+    <div style="text-align:center;padding:8px 0 16px">
+      <div style="font-size:32px;margin-bottom:12px">🗑</div>
+      <div style="font-size:15px;font-weight:700;color:var(--txt);margin-bottom:8px" id="confirm-del-name"></div>
+      <div style="font-size:12px;color:var(--dim);line-height:1.5">Esta acción es permanente.<br>Los movimientos del registro se conservarán.</div>
+    </div>
+    <button class="btn-full" style="background:rgba(180,50,50,.15);border:1px solid var(--red-bd);color:var(--red);margin-bottom:8px" onclick="confirmDelProd()">Eliminar producto</button>
+    <button class="btn-full" style="background:transparent;border:1px solid var(--brd2);color:var(--muted)" onclick="closeConfirmDel()">Cancelar</button>
+  </div>
+</div>
+</body>
+</html>
