@@ -23,17 +23,13 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
 .mtab svg{opacity:.6}.mtab.act svg{opacity:1}
 
 /* ZONA FILTER BAR */
-.zona-bar{display:flex;gap:6px;padding:8px 14px;background:var(--bg);position:sticky;top:46px;z-index:89;border-bottom:1px solid var(--brd);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.zona-bar{display:grid;grid-template-columns:repeat(var(--zona-cols,6),1fr);gap:4px;padding:8px 10px;background:var(--bg);position:sticky;top:46px;z-index:89;border-bottom:1px solid var(--brd)}
 .zona-bar::-webkit-scrollbar{display:none}
-.zpill{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:20px;border:1px solid var(--brd2);background:var(--surf);color:var(--dim);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .2s}
+.zpill{display:flex;align-items:center;justify-content:center;gap:4px;padding:7px 4px;border-radius:10px;border:1px solid var(--brd2);background:var(--surf);color:var(--dim);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;min-width:0;overflow:hidden}
 .zpill.act{background:var(--acc);border-color:var(--acc);color:#1a1810}
-.zpill-icon{font-size:14px;line-height:1}
-.zpill-txt{font-size:12px}
-@media(max-width:480px){
-  .zpill{padding:6px 8px}
-  .zpill-txt{display:none}
-  .zpill-icon{font-size:16px}
-}
+.zpill-icon{font-size:14px;line-height:1;flex-shrink:0}
+.zpill-txt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+@media(max-width:375px){.zpill-txt{display:none}.zpill-icon{font-size:16px}}
 
 /* DATE NAV */
 .date-nav{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 6px;gap:8px}
@@ -130,6 +126,13 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
 /* ESTADO PILLS in detail and form — same component */
 .est-pills{display:flex;flex-wrap:wrap;gap:6px}
 .est-pill{padding:7px 14px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid transparent;transition:all .2s}
+
+
+/* EMOJI GRID */
+.emoji-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:4px}
+.emoji-opt{padding:8px 4px;border-radius:8px;border:1px solid var(--brd2);background:var(--surf);font-size:18px;text-align:center;cursor:pointer;transition:all .15s}
+.emoji-opt.act{background:var(--acc-bg);border-color:var(--acc-bd);box-shadow:0 0 0 2px var(--acc-bd)}
+.emoji-opt:active{transform:scale(.9)}
 
 </style>
 </head>
@@ -260,14 +263,14 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
       <div class="zona-pills" id="e-zona-pills"></div>
     </div>
 
-    <!-- ESTADO — pills táctiles -->
+    <!-- NOTA -->
+    <div class="field"><label>Nota</label><input class="inp" id="e-nota" placeholder="Alérgicos, tarta, cumpleaños..."></div>
+
+    <!-- ESTADO — closest to save button -->
     <div class="field">
       <label>Estado</label>
       <div class="est-pills" id="e-estado-pills"></div>
     </div>
-
-    <!-- NOTA -->
-    <div class="field"><label>Nota</label><input class="inp" id="e-nota" placeholder="Alérgicos, tarta, cumpleaños..."></div>
 
     <button class="btn-confirm" onclick="saveRes()">Guardar reserva</button>
     <button class="btn-del" id="btn-del-res" onclick="delRes()" style="display:none">Eliminar reserva</button>
@@ -281,10 +284,34 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
       <div><div class="modal-title" id="zona-title">Zona</div></div>
       <button class="mclose" onclick="closeModal('ov-zona')">&#215;</button>
     </div>
-    <div class="field"><label>Nombre</label><input class="inp" id="z-nombre" placeholder="Terraza..."></div>
-    <div class="field"><label>Emoji</label><input class="inp" id="z-emoji" placeholder="☀️"></div>
-    <div class="field"><label>Mesas disponibles</label><input class="inp" id="z-mesas" type="number" min="1" placeholder="8"></div>
-    <button class="btn-confirm" onclick="saveZona()">Guardar</button>
+
+    <!-- NOMBRE + MESAS en misma fila -->
+    <div class="row2" style="align-items:flex-end">
+      <div class="field" style="flex:2">
+        <label>Nombre</label>
+        <input class="inp" id="z-nombre" placeholder="Terraza...">
+      </div>
+      <div class="field" style="flex:1">
+        <label>Mesas</label>
+        <div class="stepper-field">
+          <button class="step-btn" onclick="stepField('z-mesas',-1,1,50,null)">−</button>
+          <input class="inp step-inp" id="z-mesas" type="number" min="1" max="50" placeholder="8">
+          <button class="step-btn" onclick="stepField('z-mesas',1,1,50,null)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ICONO SELECTOR -->
+    <div class="field">
+      <label>Icono</label>
+      <div class="emoji-grid" id="emoji-grid"></div>
+      <input type="hidden" id="z-emoji" value="☀️">
+      <div style="font-size:10px;color:var(--faint);margin-top:6px;line-height:1.5">
+        💡 También puedes pegar cualquier emoji directamente en el nombre — los de WhatsApp funcionan perfectamente al ser universales.
+      </div>
+    </div>
+
+    <button class="btn-confirm" onclick="saveZona()">Guardar zona</button>
     <button class="btn-del" id="btn-del-zona" onclick="delZona()" style="display:none">Eliminar zona</button>
   </div>
 </div>
@@ -509,12 +536,12 @@ function setEstado(id,estado){
 /* ── NEW / EDIT RES ── */
 function fillZonaSelect(selectedId){
   const el=document.getElementById('e-zona-pills');if(!el)return;
+  const sel=selectedId||zonas[0]?.id;
   el.innerHTML=zonas.map(z=>`
-    <div class="zona-pill${z.id===selectedId?' act':''}" onclick="selectZona(${z.id},this)">
+    <div class="zona-pill${z.id===sel?' act':''}" onclick="selectZona(${z.id},this)">
       ${z.emoji} ${z.nombre}
     </div>`).join('');
-  // Store selected value
-  el.dataset.selected=selectedId||zonas[0]?.id||'';
+  el.dataset.selected=sel||'';
 }
 function selectZona(id,el){
   document.querySelectorAll('#e-zona-pills .zona-pill').forEach(p=>p.classList.remove('act'));
@@ -582,15 +609,13 @@ function openEditRes(id){
   showModal('ov-edit');
 }
 function autoPax(){
+  if(editingId!==null) return; // existing res: no auto-suggest
   const pax=parseInt(document.getElementById('e-pax').value)||0;
   const m=document.getElementById('e-mesas');
-  if(!m.dataset.manual) m.value=Math.ceil(pax/PAX_PER_MESA)||'';
+  m.value=pax?Math.ceil(pax/PAX_PER_MESA):'';
 }
 function autoMesas(){
-  const mesas=parseInt(document.getElementById('e-mesas').value)||0;
-  const p=document.getElementById('e-pax');
-  if(!p.dataset.manual) p.value=mesas*PAX_PER_MESA||'';
-  document.getElementById('e-mesas').dataset.manual='1';
+  // Never auto-fill pax from mesas — mesas is always manual
 }
 function saveRes(){
   const nombre=document.getElementById('e-nombre').value.trim();
@@ -644,8 +669,8 @@ function openNewZona(){
   document.getElementById('zona-title').textContent='Nueva zona';
   document.getElementById('btn-del-zona').style.display='none';
   document.getElementById('z-nombre').value='';
-  document.getElementById('z-emoji').value='';
   document.getElementById('z-mesas').value='';
+  renderEmojiGrid('☀️');
   showModal('ov-zona');
 }
 function openEditZona(id){
@@ -654,36 +679,44 @@ function openEditZona(id){
   document.getElementById('zona-title').textContent='Editar zona';
   document.getElementById('btn-del-zona').style.display='block';
   document.getElementById('z-nombre').value=z.nombre;
-  document.getElementById('z-emoji').value=z.emoji;
   document.getElementById('z-mesas').value=z.mesas;
+  renderEmojiGrid(z.emoji);
   showModal('ov-zona');
 }
 function saveZona(){
   const nombre=document.getElementById('z-nombre').value.trim();
   if(!nombre){toast('Introduce un nombre');return;}
-  const data={nombre,emoji:document.getElementById('z-emoji').value||'📍',mesas:parseInt(document.getElementById('z-mesas').value)||1};
+  const data={nombre,emoji:selectedEmoji||document.getElementById('z-emoji').value||'📍',mesas:parseInt(document.getElementById('z-mesas').value)||1};
   if(editingZonaId){
     const z=zonas.find(x=>x.id===editingZonaId);
     if(z) Object.assign(z,data);
   } else {
     zonas.push({id:++nid,...data});
-    // Add pill to zona-bar
-    const bar=document.getElementById('zona-bar');
-    const pill=document.createElement('div');
-    pill.className='zpill';
-    pill.innerHTML=`<span class="zpill-icon">${data.emoji}</span><span class="zpill-txt">${data.nombre}</span>`;
-    pill.onclick=function(){setZona(zonas[zonas.length-1].id,this);};
-    bar.appendChild(pill);
+    rebuildZonaBar();
   }
   closeModal('ov-zona');
   renderZon();
   toast('Zona guardada ✓');
 }
+function rebuildZonaBar(){
+  const bar=document.getElementById('zona-bar');
+  if(!bar) return;
+  // Set grid columns = 1 (Todo) + zones count
+  const cols=1+zonas.length;
+  bar.style.gridTemplateColumns=`repeat(${cols},1fr)`;
+  // Rebuild all pills
+  bar.innerHTML=`<div class="zpill act" onclick="setZona('all',this)"><span class="zpill-icon">✦</span><span class="zpill-txt">Todo</span></div>`+
+    zonas.map(z=>`<div class="zpill" onclick="setZona(${z.id},this)"><span class="zpill-icon">${z.emoji}</span><span class="zpill-txt">${z.nombre}</span></div>`).join('');
+  // Reapply active state
+  setZona(curZona, bar.querySelector('.zpill.act')||bar.firstChild);
+}
+
 function delZona(){
   if(!editingZonaId)return;
   zonas=zonas.filter(x=>x.id!==editingZonaId);
   closeModal('ov-zona');
   renderZon();
+  rebuildZonaBar();
   toast('Zona eliminada');
 }
 
@@ -707,8 +740,33 @@ function stepField(id,delta,min,max,cb){
   if(cb) cb();
 }
 
+/* ── ZONA EMOJIS ── */
+const ZONA_EMOJIS = [
+  '☀️','🌙','🌿','🌊','🏡','🚪','🍷','🍺','🎭','🎪',
+  '🪑','🛋️','🌺','⛱️','🔥','💫','🎵','🏮','🕯️','🌸',
+  '🍃','🏛️','🎨','🌴','🍾','✨','🎬','🎩',
+];
+let selectedEmoji = '☀️';
+
+function renderEmojiGrid(current){
+  selectedEmoji = current || ZONA_EMOJIS[0];
+  document.getElementById('z-emoji').value = selectedEmoji;
+  const grid = document.getElementById('emoji-grid');
+  if(!grid) return;
+  grid.innerHTML = ZONA_EMOJIS.map(e =>
+    `<div class="emoji-opt${e===selectedEmoji?' act':''}" onclick="pickEmoji('${e}',this)">${e}</div>`
+  ).join('');
+}
+function pickEmoji(e, el){
+  selectedEmoji = e;
+  document.getElementById('z-emoji').value = e;
+  document.querySelectorAll('#emoji-grid .emoji-opt').forEach(x=>x.classList.remove('act'));
+  el.classList.add('act');
+}
+
 /* ── INIT ── */
 initDay();
+rebuildZonaBar();
 renderRes();
 </script>
 </body>

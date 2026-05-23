@@ -10,26 +10,13 @@
 body{background:#111417;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden}
 
 /* NAVBAR */
-.navbar{background:var(--nav);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--brd);height:49px;flex-shrink:0;transition:background .3s}
-.logo-g{display:flex;flex-direction:column;align-items:center;line-height:1}
-.logo-g-neo{font-size:7px;letter-spacing:2.5px;color:var(--acc);text-transform:uppercase;margin-bottom:1px}
-.logo-g-main{font-size:16px;color:var(--acc);font-family:Georgia,serif;letter-spacing:4px}
-.logo-g-deco{display:flex;align-items:center;gap:4px;margin-top:1px}
-.logo-g-line{width:18px;height:.5px;background:rgba(197,166,105,.4)}
-.logo-g-sub{font-size:6px;letter-spacing:2px;color:var(--acc);opacity:.6;text-transform:uppercase}
-.logo-s{display:flex;flex-direction:column;align-items:center;line-height:1}
-.logo-s-main{font-size:18px;color:#fff;font-family:Georgia,serif;letter-spacing:2px;font-weight:700}
-.logo-s-sub{font-size:7px;letter-spacing:2px;color:rgba(255,255,255,.65);text-transform:uppercase;margin-top:2px}
-.local-sw{display:flex;gap:3px;background:rgba(0,0,0,.25);border-radius:8px;padding:3px}
-.lbtn{border:none;border-radius:6px;padding:5px 9px;font-size:11px;cursor:pointer;font-weight:600;background:transparent;color:rgba(255,255,255,.45);transition:all .2s;white-space:nowrap}
-.lbtn.active-g{background:var(--acc);color:#22292D}
-.lbtn.active-s{background:#fff;color:#A32B2A}
-@media(max-width:360px){
-  .local-sw{display:none}
-  .local-sel-wrap{display:block}
-}
-.local-sel-wrap{display:none}
-.local-sel{background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:5px 10px;font-size:12px;color:#fff;font-weight:600;outline:none;cursor:pointer}
+.navbar{background:var(--nav);padding:10px 16px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--brd);height:49px;flex-shrink:0}
+.logo{display:flex;flex-direction:column;align-items:center;line-height:1}
+.logo-neo{font-size:7px;letter-spacing:2.5px;color:var(--acc);text-transform:uppercase;margin-bottom:1px}
+.logo-main{font-size:16px;color:var(--acc);font-family:Georgia,serif;letter-spacing:4px}
+.logo-deco{display:flex;align-items:center;gap:4px;margin-top:1px}
+.logo-line{width:18px;height:.5px;background:rgba(197,166,105,.4)}
+.logo-sub{font-size:6px;letter-spacing:2px;color:var(--acc);opacity:.6;text-transform:uppercase}
 
 /* IFRAME CONTAINER */
 .pages{flex:1;position:relative;overflow:hidden}
@@ -37,37 +24,26 @@ iframe{position:absolute;inset:0;width:100%;height:100%;border:none;display:none
 iframe.active{display:block}
 
 /* BOTTOM NAV */
-.bottom-nav{height:var(--bnav-h);background:var(--nav);border-top:1px solid var(--brd);display:flex;flex-shrink:0;transition:background .3s}
+.bottom-nav{height:var(--bnav-h);background:var(--nav);border-top:1px solid var(--brd);display:flex;flex-shrink:0}
 .bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;padding:6px 4px;border:none;background:transparent}
 .bnav-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center;color:var(--faint)}
 .bnav-label{font-size:10px;font-weight:500;color:var(--faint)}
-.bnav-item.active .bnav-icon,.bnav-item.active .bnav-label{color:var(--acc)}
+.bnav-item.active .bnav-icon,
+.bnav-item.active .bnav-label{color:var(--acc)}
 .bnav-item:active{opacity:.7}
-body.sala .navbar{background:#A32B2A}
-body.sala .bottom-nav{background:#8a1f1f}
-body.sala .bnav-item.active .bnav-icon,
-body.sala .bnav-item.active .bnav-label{color:#fff}
 </style>
 </head>
 <body>
 
-<div class="navbar" id="navbar">
-  <div id="logo-area">
-    <div class="logo-g">
-      <div class="logo-g-neo">— NEOTABERNA —</div>
-      <div class="logo-g-main">LA GALERÍA</div>
-      <div class="logo-g-deco"><div class="logo-g-line"></div><div class="logo-g-sub">— Y ALGO MÁS —</div><div class="logo-g-line"></div></div>
+<div class="navbar">
+  <div class="logo">
+    <div class="logo-neo">— NEOTABERNA —</div>
+    <div class="logo-main">LA GALERÍA</div>
+    <div class="logo-deco">
+      <div class="logo-line"></div>
+      <div class="logo-sub">— Y ALGO MÁS —</div>
+      <div class="logo-line"></div>
     </div>
-  </div>
-  <div class="local-sw">
-    <button class="lbtn active-g" id="btn-g" onclick="setLocal('galeria')">La Galería</button>
-    <button class="lbtn" id="btn-s" onclick="setLocal('sala')">La Sala</button>
-  </div>
-  <div class="local-sel-wrap">
-    <select class="local-sel" onchange="setLocal(this.value)">
-      <option value="galeria">La Galería</option>
-      <option value="sala">La Sala</option>
-    </select>
   </div>
 </div>
 
@@ -111,39 +87,13 @@ body.sala .bnav-item.active .bnav-label{color:#fff}
 </nav>
 
 <script>
-var curPage = 'turnos';
-
-function goTo(page) {
-  // Hide all iframes
-  ['turnos','reservas','stock'].forEach(function(p) {
-    document.getElementById('fr-' + p).classList.remove('active');
-    document.getElementById('bnav-' + p).classList.remove('active');
+function goTo(page){
+  ['turnos','reservas','stock'].forEach(function(p){
+    document.getElementById('fr-'+p).classList.remove('active');
+    document.getElementById('bnav-'+p).classList.remove('active');
   });
-  // Show selected
-  document.getElementById('fr-' + page).classList.add('active');
-  document.getElementById('bnav-' + page).classList.add('active');
-  curPage = page;
-}
-
-function setLocal(local) {
-  var isG = local === 'galeria';
-  // Update shell navbar
-  document.body.classList.toggle('sala', !isG);
-  document.getElementById('btn-g').className = 'lbtn' + (isG ? ' active-g' : '');
-  document.getElementById('btn-s').className = 'lbtn' + (isG ? '' : ' active-s');
-  // Update logo
-  document.getElementById('logo-area').innerHTML = isG
-    ? '<div class="logo-g"><div class="logo-g-neo">— NEOTABERNA —</div><div class="logo-g-main">LA GALERÍA</div><div class="logo-g-deco"><div class="logo-g-line"></div><div class="logo-g-sub">— Y ALGO MÁS —</div><div class="logo-g-line"></div></div></div>'
-    : '<div class="logo-s"><div class="logo-s-main">LA SALA</div><div class="logo-s-sub">VUELTA AL ORIGEN · BAR</div></div>';
-  // Tell each iframe about the local change
-  ['turnos','reservas','stock'].forEach(function(p) {
-    var fr = document.getElementById('fr-' + p);
-    try {
-      if (fr.contentWindow && fr.contentWindow.setLocal) {
-        fr.contentWindow.setLocal(local);
-      }
-    } catch(e) {}
-  });
+  document.getElementById('fr-'+page).classList.add('active');
+  document.getElementById('bnav-'+page).classList.add('active');
 }
 </script>
 </body>
