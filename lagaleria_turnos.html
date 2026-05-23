@@ -11,8 +11,10 @@
   --bg:#111417;--surface:#1a2226;--border:#2e3a3f;--border2:#3a4a50;
   --text:#f0ece4;--muted:#a8b8bf;--dim:#7a8f96;--faint:#5a6a70;
   --nav:#22292D;--acc:#C5A669;--acc-bg:rgba(197,166,105,0.12);--acc-bd:rgba(197,166,105,0.35);
-  --sm-bg:#1a2a3a;--sm-bd:var(--sm-text);--sm-text:var(--sm-text);--sn-bg:#1a2a1a;--sn-bd:var(--sn-text);--sn-text:var(--sn-text);
-  --cm-bg:#2a0e0e;--cm-bd:var(--cm-text);--cm-text:var(--cm-text);--cn-bg:#2a1400;--cn-bd:var(--cn-text);--cn-text:var(--cn-text);
+  --sm-text:#5599bb;--sm-bg:#1a2a3a;--sm-bd:rgba(85,153,187,.4);
+  --sn-text:#4a8a4a;--sn-bg:#1a2a1a;--sn-bd:rgba(74,138,74,.4);
+  --cm-text:#cc4444;--cm-bg:#2a0e0e;--cm-bd:rgba(180,50,50,.4);
+  --cn-text:#e07000;--cn-bg:#2a1400;--cn-bd:rgba(200,100,0,.4);
   --bnav-h:62px;
 }
 body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh;transition:background .3s,color .3s;padding-bottom:0}
@@ -136,11 +138,11 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .cell-cn{background:var(--cn-bg);border:1px solid #6a3a00;border-top:2px solid var(--cn-bd)}
 .chip{display:flex;align-items:center;gap:3px;border-radius:5px;padding:4px 6px;cursor:pointer;user-select:none;min-width:0;overflow:hidden}
 .chip:active{opacity:.7}
-.chip-sm{background:#1e3a4a;border:1px solid #3a6a7a}
-.chip-sn{background:#1e3a1e;border:1px solid #3a6a3a}
-.chip-cm{background:#3a1010;border:1px solid #8a3030}
-.chip-cn{background:#3a2000;border:1px solid #8a5000}
-.chip-name{font-size:11px;color:#d0dde2;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.chip-sm{background:var(--sm-bg);border:1px solid var(--sm-bd)}
+.chip-sn{background:var(--sn-bg);border:1px solid var(--sn-bd)}
+.chip-cm{background:var(--cm-bg);border:1px solid var(--cm-bd)}
+.chip-cn{background:var(--cn-bg);border:1px solid var(--cn-bd)}
+.chip-name{font-size:11px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500;color:#d0dde2}
 .chip-tag{font-size:9px;padding:1px 5px;border-radius:3px;white-space:nowrap;flex-shrink:0;background:var(--acc-bg);color:var(--acc);border:1px solid var(--acc-bd)}
 .dh{width:10px;height:10px;display:flex;flex-direction:column;justify-content:space-between;flex-shrink:0;opacity:.2;cursor:grab;padding:1px 0}
 .dh span{display:block;height:2px;background:var(--muted);border-radius:1px}
@@ -193,10 +195,10 @@ tr.wr td:last-child{border-radius:0 8px 8px 0;border:1px solid var(--border);bor
 .day-slot-top,.day-slot-bot{height:20px;display:flex;align-items:center}
 .day-slot-hr{display:flex;align-items:center}
 .ws{border-radius:4px;padding:2px 3px;font-size:9px;font-weight:600;display:inline-flex;align-items:center;white-space:nowrap}
-.ws-sm{background:var(--sm-bg);color:var(--sm-bd);border:1px solid #2a4a5a}
-.ws-sn{background:var(--sn-bg);color:var(--sn-bd);border:1px solid #2a4a2a}
-.ws-cm{background:var(--cm-bg);color:#dd4444;border:1px solid #5a1a1a}
-.ws-cn{background:var(--cn-bg);color:var(--cn-bd);border:1px solid #6a3a00}
+.ws-sm{background:var(--sm-bg);color:var(--sm-text);border:1px solid var(--sm-bd)}
+.ws-sn{background:var(--sn-bg);color:var(--sn-text);border:1px solid var(--sn-bd)}
+.ws-cm{background:var(--cm-bg);color:var(--cm-text);border:1px solid var(--cm-bd)}
+.ws-cn{background:var(--cn-bg);color:var(--cn-text);border:1px solid var(--cn-bd)}
 .ws-hour{font-size:8px;color:var(--acc);background:var(--acc-bg);border:1px solid var(--acc-bd);border-radius:3px;padding:1px 3px}
 .tot-n{font-size:14px;font-weight:700;color:var(--acc)}
 
@@ -247,7 +249,7 @@ tr.wr td:last-child{border-radius:0 8px 8px 0;border:1px solid var(--border);bor
 .sg-day.tday{color:var(--acc)}
 .sg-label{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);padding:2px;white-space:nowrap}
 .sg-label .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.sg-cell{border:1px solid var(--border);border-radius:5px;height:26px;cursor:pointer;background:var(--bg);display:flex;align-items:center;justify-content:center;position:relative}
+.sg-cell{border:1px solid var(--border2);border-radius:5px;height:26px;cursor:pointer;background:var(--bg);display:flex;align-items:center;justify-content:center;position:relative}
 .sg-cell:active{opacity:.7}
 .sg-cell.on-sm{background:var(--sm-bg);border-color:var(--sm-bd)}
 .sg-cell.on-sn{background:var(--sn-bg);border-color:var(--sn-bd)}
@@ -581,6 +583,31 @@ input[type=file]{display:none}
 .autogen-loading-txt{font-size:13px;font-weight:600;color:var(--acc)}
 @keyframes spin{to{transform:rotate(360deg)}}
 
+
+/* TURNOS TABS — sticky fila 1 */
+.turnos-tabs{display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:46px;background:var(--nav);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:90;gap:8px}
+.tt-left{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.tt-arrow{padding:4px 7px;font-size:16px;height:28px;min-width:28px}
+.tt-date{font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;line-height:1.2}
+.tt-sub{font-size:10px;color:var(--dim);line-height:1.2}
+
+/* TURNOS PILLS — fila 2 */
+.turnos-pills{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:6px 14px;background:var(--bg);border-bottom:1px solid var(--border)}
+.turnos-pills::-webkit-scrollbar{display:none}
+.tpill{display:flex;align-items:center;justify-content:center;gap:5px;padding:7px 6px;border-radius:8px;border:1px solid var(--border2);background:var(--surface);color:var(--dim);font-size:11px;font-weight:600;cursor:pointer;min-width:0;overflow:hidden;transition:all .2s}
+.tpill:active{opacity:.7}
+.tpill-accent{color:var(--acc);border-color:var(--acc-bd)}
+.tpill-danger{color:#cc6060;border-color:rgba(200,60,60,.3)}
+.tpill-icon{font-size:14px;line-height:1;display:flex;align-items:center}
+.tpill-icon .material-symbols-outlined{font-size:15px}
+.tpill-txt{line-height:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.tpill-icon-only{display:none}
+@media(max-width:480px){
+  .tpill-txt{display:none}
+  .tpill-icon-only{display:inline-flex;align-items:center}
+  .tpill{padding:6px 8px}
+}
+
 </style>
 </head>
 <body>
@@ -588,45 +615,43 @@ input[type=file]{display:none}
 <!-- NAVBAR -->
 <!-- PAGES -->
 <div class="page active" id="page-turnos">
-  <!-- TOP BAR: fila 1 -->
-  <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px 0;gap:8px">
-    <div style="display:flex;align-items:center;gap:6px">
-      <button class="topbar-pill" onclick="openWeekConfig()">
-        <span class="material-symbols-outlined" style="font-size:16px">calendar_month</span>
-        <span class="topbar-pill-text">Editar semana</span>
-      </button>
-      <button class="topbar-pill topbar-pill-accent" onclick="openAutoModal()">
-        <span>✨</span>
-        <span class="topbar-pill-text">Autogenerar</span>
-      </button>
-      <button class="topbar-pill" onclick="limpiarSemana()" style="color:#cc6060;border-color:rgba(200,60,60,.3)">
-        <span>🗑</span>
-        <span class="topbar-pill-text">Limpiar</span>
-      </button>
+  <!-- FILA 1: tabs sticky — fecha+nav izq, semana/persona dcha -->
+  <div class="turnos-tabs">
+    <div class="tt-left">
+      <button class="wbtn tt-arrow" onclick="changeWeek(-1)">&#8249;</button>
+      <div>
+        <div class="tt-date" id="wlabel">18 – 24 mayo 2026</div>
+        <div class="tt-sub" id="wsub">Semana 21</div>
+      </div>
+      <button class="wbtn tt-arrow" onclick="changeWeek(1)">&#8250;</button>
     </div>
-    <button class="topbar-pill" onclick="openTrabajadores()">
-      <span style="font-size:15px">&#128101;</span>
-      <span class="topbar-pill-text">Trabajadores&nbsp;<span id="st-w" class="pill-count">—</span></span>
-      <span class="topbar-pill-icon-only"><span id="st-w-m" class="pill-count">—</span></span>
+    <div class="view-tabs">
+      <button class="vtab active" id="vtab-s" onclick="setView('semana')">Semana</button>
+      <button class="vtab" id="vtab-p" onclick="setView('persona')">Persona</button>
+    </div>
+  </div>
+
+  <!-- FILA 2: pills de acción -->
+  <div class="turnos-pills">
+    <button class="tpill" onclick="openWeekConfig()">
+      <span class="material-symbols-outlined tpill-icon">calendar_month</span>
+      <span class="tpill-txt">Editar semana</span>
+    </button>
+    <button class="tpill tpill-accent" onclick="openAutoModal()">
+      <span class="tpill-icon">✨</span>
+      <span class="tpill-txt">Autogenerar</span>
+    </button>
+    <button class="tpill tpill-danger" onclick="limpiarSemana()">
+      <span class="tpill-icon">🗑</span>
+      <span class="tpill-txt">Limpiar</span>
+    </button>
+    <button class="tpill" onclick="openTrabajadores()">
+      <span class="tpill-icon">&#128101;</span>
+      <span class="tpill-txt">Trabajadores&nbsp;<span id="st-w" class="pill-count">—</span></span>
+      <span class="tpill-icon-only"><span id="st-w-m" class="pill-count">—</span></span>
     </button>
   </div>
-  <!-- FILA 2: fecha+flechas izq · limpiar+semana/persona dcha -->
-  <div style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 0;gap:8px">
-    <div style="display:flex;align-items:center;gap:6px">
-      <button class="wbtn" onclick="changeWeek(-1)" style="padding:4px 8px;font-size:16px">&#8249;</button>
-      <div>
-        <div style="font-size:13px;font-weight:700;color:var(--text);white-space:nowrap" id="wlabel">18 – 24 mayo 2026</div>
-        <div style="font-size:11px;color:var(--dim)" id="wsub">Semana 21</div>
-      </div>
-      <button class="wbtn" onclick="changeWeek(1)" style="padding:4px 8px;font-size:16px">&#8250;</button>
-    </div>
-    <div style="display:flex;align-items:center;gap:6px">
-      <div class="view-tabs">
-        <button class="vtab active" id="vtab-s" onclick="setView('semana')">Semana</button>
-        <button class="vtab" id="vtab-p" onclick="setView('persona')">Persona</button>
-      </div>
-    </div>
-  </div>
+
 
   <div id="view-semana">
     <div class="grid-scroll">
@@ -833,7 +858,7 @@ input[type=file]{display:none}
       <div class="acc-block">
         <div class="acc-block-title">Skills</div>
         <div id="skills-body"></div>
-        <button class="btn-add" onclick="openSkillsModal()">✏ Añadir / modificar skills</button>
+        <button class="btn-add" onclick="openSkillsModal()">✏ Añadir / Quitar Skills</button>
       </div>
 
       <!-- VACACIONES -->
@@ -1049,7 +1074,8 @@ input[type=file]{display:none}
       <button class="mclose" onclick="closeOv('ov-week-cfg')">&#215;</button>
     </div>
     <div id="wc-body"></div>
-    <button class="btn-confirm" style="width:100%;margin-top:12px" onclick="saveWeekConfig()">Guardar configuración</button>
+    <button class="btn-add" style="width:100%;margin-top:12px" onclick="openSkillsModalGlobal()">✏ Añadir / Quitar Skills</button>
+    <button class="btn-confirm" style="width:100%;margin-top:8px" onclick="saveWeekConfig()">Guardar configuración</button>
   </div>
 </div>
 <!-- SKILLS MODAL -->
@@ -1089,23 +1115,23 @@ const EV_COLS={birthday:"#e880c0",cata:"#b880e0",menu:"#60c888",evento:"#60aaee"
 const locals={
   galeria:{
     staff:[
-      {name:"Lorenzo",sec:"ambos",photo:null,tel:"666 123 456",minT:4,maxT:8,unavailMed:[],unavailNoch:[],vacaciones:[],prioridad:"fijo",skills:{barra:"domina",camarero_salon:"domina",jefe_sala:"puede",pase:"puede"}},
+      {name:"Lorenzo",sec:"ambos",photo:null,tel:"666 123 456",minT:4,maxT:8,unavailMed:[],unavailNoch:[],vacaciones:[],prioridad:"fijo",skills:{barra:"domina",camarero_salon:"domina",pase:"puede"}},
       {name:"Manu",sec:"sala",photo:null,tel:"677 234 567",minT:3,maxT:6,unavailMed:[0],unavailNoch:[],prioridad:"fijo",skills:{barra:"puede",camarero_salon:"domina",camarero_terraza:"puede"}},
       {name:"Luis",sec:"sala",photo:null,tel:"688 345 678",minT:0,maxT:0,unavailMed:[],unavailNoch:[],vacaciones:[],prioridad:"fijo",skills:{barra:"domina",camarero_salon:"puede",camarero_terraza:"domina"}},
-      {name:"Mayte",sec:"sala",photo:null,tel:"699 456 789",minT:2,maxT:5,unavailMed:[],unavailNoch:[6],prioridad:"fijo",skills:{camarero_salon:"domina",camarero_sala:"domina",jefe_sala:"puede"}},
+      {name:"Mayte",sec:"sala",photo:null,tel:"699 456 789",minT:2,maxT:5,unavailMed:[],unavailNoch:[6],prioridad:"fijo",skills:{camarero_salon:"domina",camarero_sala:"domina"}},
       {name:"Bryan",sec:"sala",photo:null,tel:"",minT:0,maxT:0,unavailMed:[1,2],unavailNoch:[1,2],prioridad:"eventual",skills:{barra:"puede",camarero_salon:"puede"}},
       {name:"Antonio",sec:"ambos",photo:null,tel:"",minT:0,maxT:0,unavailMed:[],unavailNoch:[],vacaciones:[],prioridad:"eventual",skills:{camarero_salon:"domina",camarero_terraza:"puede",plancha:"puede",pase:"puede"}},
       {name:"Alejandro",sec:"sala",photo:null,tel:"",minT:0,maxT:0,unavailMed:[],unavailNoch:[],vacaciones:[],prioridad:"eventual",skills:{barra:"puede",camarero_salon:"domina",camarero_terraza:"puede"}},
       {name:"Sara",sec:"sala",photo:null,tel:"",minT:0,maxT:0,unavailMed:[0,1,2,3,4],unavailNoch:[0,1,2,3,4],prioridad:"eventual",skills:{camarero_sala:"domina",camarero_salon:"puede"}},
       {name:"Noa",sec:"sala",photo:null,tel:"",minT:0,maxT:0,unavailMed:[],unavailNoch:[],vacaciones:[],prioridad:"eventual",skills:{barra:"puede",camarero_terraza:"domina"}},
       {name:"Josep",sec:"sala",photo:null,tel:"",minT:0,maxT:0,unavailMed:[],unavailNoch:[],vacaciones:[],prioridad:"eventual",skills:{camarero_salon:"puede",camarero_terraza:"puede",barra:"puede"}},
-      {name:"Israel",sec:"ambos",photo:null,tel:"611 987 654",minT:5,maxT:10,unavailMed:[],unavailNoch:[],vacaciones:[],prioridad:"fijo",skills:{plancha:"domina",pase:"domina",jefe_cocina:"domina",jefe_sala:"puede"}},
+      {name:"Israel",sec:"ambos",photo:null,tel:"611 987 654",minT:5,maxT:10,unavailMed:[],unavailNoch:[],vacaciones:[],prioridad:"fijo",skills:{plancha:"domina",pase:"domina"}},
       {name:"Noemi",sec:"ambos",photo:null,tel:"",minT:0,maxT:0,unavailMed:[],unavailNoch:[5],prioridad:"eventual",skills:{pase:"domina",raciones:"puede",camarero_sala:"puede"}},
       {name:"JL",sec:"cocina",photo:null,tel:"",minT:0,maxT:0,unavailMed:[],unavailNoch:[],vacaciones:[],prioridad:"fijo",skills:{plancha:"domina",pase:"puede",raciones:"puede"}},
-      {name:"Ruben",sec:"cocina",photo:null,tel:"",minT:0,maxT:0,unavailMed:[],unavailNoch:[],vacaciones:[],prioridad:"eventual",skills:{plancha:"puede",pase:"domina",jefe_cocina:"puede"}},
+      {name:"Ruben",sec:"cocina",photo:null,tel:"",minT:0,maxT:0,unavailMed:[],unavailNoch:[],vacaciones:[],prioridad:"eventual",skills:{plancha:"puede",pase:"domina"}},
       {name:"JI",sec:"cocina",photo:null,tel:"",minT:0,maxT:0,unavailMed:[0,1,2,3,4,5,6],unavailNoch:[0,1,2,3,4,5,6],prioridad:"eventual",skills:{plancha:"puede",raciones:"puede"}},
       {name:"Noa C",sec:"cocina",photo:null,tel:"",minT:0,maxT:0,unavailMed:[],unavailNoch:[],vacaciones:[],prioridad:"eventual",skills:{pase:"puede",raciones:"domina"}},
-      {name:"Josep C",sec:"cocina",photo:null,tel:"",minT:0,maxT:0,unavailMed:[],unavailNoch:[],vacaciones:[],prioridad:"eventual",skills:{plancha:"domina",raciones:"puede",jefe_cocina:"puede"}},
+      {name:"Josep C",sec:"cocina",photo:null,tel:"",minT:0,maxT:0,unavailMed:[],unavailNoch:[],vacaciones:[],prioridad:"eventual",skills:{plancha:"domina",raciones:"puede"}},
       {name:"Refuerzo X",sec:"ambos",photo:null,tel:"",minT:0,maxT:0,unavailMed:[],unavailNoch:[],vacaciones:[],prioridad:"eventual",skills:{barra:"puede",camarero_salon:"puede",plancha:"puede",pase:"puede"}},
     ],
     data:{
@@ -1959,17 +1985,21 @@ function getDayVacacion(workerName, dayCol) {
 
 /* ── ROLES ── */
 const ROLES_COCINA=[
-  {id:'plancha',icon:'🍳',label:'Plancha / Freidora'},
-  {id:'pase',icon:'📋',label:'Pase'},
-  {id:'raciones',icon:'🍽️',label:'Raciones'},
-  {id:'jefe_cocina',icon:'👨‍🍳',label:'Jefe de cocina'},
+  {id:'raciones',      icon:'🍽️', label:'Raciones'},
+  {id:'plancha',       icon:'🍳', label:'Plancha / Freidora'},
+  {id:'pase',          icon:'📋', label:'Pase'},
+  {id:'preparacion',   icon:'🥗', label:'Preparación'},
+  {id:'apoyo_cocina',  icon:'🤝', label:'Apoyo Cocina'},
+  {id:'stock_cocina',  icon:'📦', label:'Stock Cocina'},
 ];
 const ROLES_SALA=[
-  {id:'barra',icon:'🍺',label:'Barra'},
-  {id:'camarero_salon',icon:'🪑',label:'Camarero salón'},
-  {id:'camarero_terraza',icon:'☀️',label:'Camarero terraza'},
-  {id:'camarero_sala',icon:'🎭',label:'Camarero sala'},
-  {id:'jefe_sala',icon:'📞',label:'Jefe de sala'},
+  {id:'barra',         icon:'🍺', label:'Barra'},
+  {id:'tostas',        icon:'🍞', label:'Tostas'},
+  {id:'camarero',      icon:'🪑', label:'Camarero'},
+  {id:'runner',        icon:'🏃', label:'Runner'},
+  {id:'reservas',      icon:'📅', label:'Reservas'},
+  {id:'apoyo_sala',    icon:'🤝', label:'Apoyo Sala'},
+  {id:'stock_sala',    icon:'📦', label:'Stock Sala'},
 ];
 
 /* Init skills/prioridad on staff if missing */
@@ -2487,6 +2517,28 @@ function removeWcEntry(day, slot, idx){
 function saveWeekConfig(){
   closeOv('ov-week-cfg');
   showToast('Configuración guardada ✓');
+}
+
+
+function openSkillsModalGlobal(){
+  // Open skills modal in global edit mode (not tied to a specific worker)
+  const modal = document.getElementById('ov-skills');
+  if(!modal) return;
+  document.getElementById('skills-modal-sub').textContent='Editar roles globales del local';
+  const ALL=[...ROLES_COCINA,...ROLES_SALA];
+  const mkRow=(r)=>`<div class="skill-row">
+    <span class="skill-icon">${r.icon}</span>
+    <span class="skill-name">${r.label}</span>
+    <span style="font-size:10px;color:var(--dim);margin-left:auto">${ROLES_COCINA.includes(r)?'Cocina':'Sala'}</span>
+  </div>`;
+  let h='<div class="skill-dept-lbl">Cocina</div>'+ROLES_COCINA.map(mkRow).join('');
+  h+='<div class="skill-dept-lbl">Sala</div>'+ROLES_SALA.map(mkRow).join('');
+  h+='<div style="font-size:11px;color:var(--faint);padding:10px 0;font-style:italic">Los roles se gestionarán desde Antigravity con Supabase.</div>';
+  document.getElementById('skills-modal-body').innerHTML=h;
+  // Override apply button to just close
+  const applyBtn=modal.querySelector('.btn-confirm');
+  if(applyBtn){applyBtn.textContent='Cerrar';applyBtn.onclick=()=>closeOv('ov-skills');}
+  showOv('ov-skills');
 }
 
 </script>
