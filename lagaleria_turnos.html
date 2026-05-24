@@ -64,7 +64,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .bnav-item:active{opacity:.7}
 
 /* ── PAGES ── */
-.page{display:none;padding:14px 14px 20px}
+.page{display:none}
 .page.active{display:block}
 
 /* ── STATS ── */
@@ -95,11 +95,11 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .week-info .wlabel{font-size:14px;font-weight:600;color:var(--text)}
 .week-info .wsub{font-size:11px;color:var(--dim)}
 .view-tabs{display:flex;gap:5px}
-.vtab{padding:6px 12px;border-radius:7px;border:1px solid var(--border2);font-size:12px;cursor:pointer;color:var(--dim);background:transparent}
-.vtab.active{background:var(--acc-bg);color:var(--acc);border-color:var(--acc-bd)}
+.vtab{flex:1;padding:13px 8px;text-align:center;font-size:13px;font-weight:600;color:var(--dim);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:5px;border-radius:0;border:none;background:transparent}
+.vtab.active{color:var(--acc);border-bottom-color:var(--acc)}
 
 /* ── GRID ── */
-.grid-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.grid-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding:10px 14px 20px}
 .grid-inner{display:flex;flex-direction:column;gap:4px;min-width:646px}
 .grid-labels{width:58px;flex-shrink:0;display:flex;flex-direction:column}
 .turno-label{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:4px 6px;gap:3px;min-height:72px;cursor:pointer;flex-shrink:0;margin-bottom:4px}
@@ -585,16 +585,18 @@ input[type=file]{display:none}
 
 
 /* TURNOS TABS — sticky fila 1 */
-.turnos-tabs{display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:46px;background:var(--nav);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:90;gap:8px}
-.tt-left{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.tt-arrow{padding:4px 7px;font-size:16px;height:28px;min-width:28px}
+/* TURNOS — tab bar matches stock/reservas */
+.turnos-tabs{display:flex;background:var(--nav);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:90;width:100%}
+.tt-left{display:flex;align-items:center;gap:5px;padding:0 14px;flex-shrink:0;border-right:1px solid var(--border)}
+.tt-arrow{padding:4px 7px;font-size:16px;width:28px!important;height:28px!important;flex-shrink:0}
 .tt-date{font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;line-height:1.2}
 .tt-sub{font-size:10px;color:var(--dim);line-height:1.2}
+.tt-vtabs{display:flex;flex:1}
 
 /* TURNOS PILLS — fila 2 */
-.turnos-pills{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:6px 14px;background:var(--bg);border-bottom:1px solid var(--border)}
+.turnos-pills{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:8px 10px;background:var(--bg);border-bottom:1px solid var(--border)}
 .turnos-pills::-webkit-scrollbar{display:none}
-.tpill{display:flex;align-items:center;justify-content:center;gap:5px;padding:7px 6px;border-radius:8px;border:1px solid var(--border2);background:var(--surface);color:var(--dim);font-size:11px;font-weight:600;cursor:pointer;min-width:0;overflow:hidden;transition:all .2s}
+.tpill{display:flex;align-items:center;justify-content:center;gap:4px;padding:7px 4px;border-radius:10px;border:1px solid var(--border2);background:var(--surface);color:var(--dim);font-size:11px;font-weight:600;cursor:pointer;min-width:0;overflow:hidden;transition:all .2s;flex:1}
 .tpill:active{opacity:.7}
 .tpill-accent{color:var(--acc);border-color:var(--acc-bd)}
 .tpill-danger{color:#cc6060;border-color:rgba(200,60,60,.3)}
@@ -625,7 +627,7 @@ input[type=file]{display:none}
       </div>
       <button class="wbtn tt-arrow" onclick="changeWeek(1)">&#8250;</button>
     </div>
-    <div class="view-tabs">
+    <div class="tt-vtabs">
       <button class="vtab active" id="vtab-s" onclick="setView('semana')">Semana</button>
       <button class="vtab" id="vtab-p" onclick="setView('persona')">Persona</button>
     </div>

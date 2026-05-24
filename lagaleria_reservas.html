@@ -23,13 +23,14 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
 .mtab svg{opacity:.6}.mtab.act svg{opacity:1}
 
 /* ZONA FILTER BAR */
-.zona-bar{display:grid;grid-template-columns:repeat(var(--zona-cols,6),1fr);gap:4px;padding:8px 10px;background:var(--bg);position:sticky;top:46px;z-index:89;border-bottom:1px solid var(--brd)}
+.zona-bar{display:flex;gap:6px;padding:10px 14px;background:var(--bg);position:sticky;top:46px;z-index:89;border-bottom:1px solid var(--brd)}
 .zona-bar::-webkit-scrollbar{display:none}
-.zpill{display:flex;align-items:center;justify-content:center;gap:4px;padding:7px 4px;border-radius:10px;border:1px solid var(--brd2);background:var(--surf);color:var(--dim);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;min-width:0;overflow:hidden}
+.zpill{display:flex;align-items:center;justify-content:center;gap:4px;padding:6px 8px;border-radius:20px;border:1px solid var(--brd2);background:var(--surf);color:var(--dim);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;flex:1;min-width:0;overflow:hidden}
+.zpill:active{opacity:.7}
 .zpill.act{background:var(--acc);border-color:var(--acc);color:#1a1810}
 .zpill-icon{font-size:14px;line-height:1;flex-shrink:0}
-.zpill-txt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
-@media(max-width:375px){.zpill-txt{display:none}.zpill-icon{font-size:16px}}
+.zpill-txt{display:none;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(min-width:480px){.zpill-txt{display:inline}}
 
 /* DATE NAV */
 .date-nav{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 6px;gap:8px}
@@ -69,11 +70,21 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
 /* ADD BTN */
 .add-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;border-radius:10px;background:transparent;border:1.5px dashed var(--acc-bd);color:var(--acc);font-size:13px;font-weight:600;cursor:pointer;margin:4px 0}
 
-/* EMPTY */
-.empty{text-align:center;padding:60px 20px}
+/* EMPTY STATE — shared component */
+.empty{text-align:center;padding:48px 20px 32px}
 .empty-icon{font-size:36px;margin-bottom:12px}
 .empty-title{font-size:15px;font-weight:700;color:var(--txt);margin-bottom:6px}
-.empty-sub{font-size:12px;color:var(--dim)}
+.empty-sub{font-size:12px;color:var(--dim);line-height:1.5;margin-bottom:20px}
+.empty-action{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px 22px;border-radius:10px;background:transparent;border:1.5px dashed var(--acc-bd);color:var(--acc);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.empty-action:active{background:var(--acc-bg)}
+
+/* TEL inline with call/wa buttons */
+.tel-inline{display:flex;align-items:center;gap:6px}
+.tel-inline .inp{flex:1;min-width:0}
+.tel-action-btn{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0;border:1px solid var(--brd2);background:var(--nav);cursor:pointer;transition:opacity .2s}
+.tel-action-btn:active{opacity:.7}
+.tel-action-btn.call{background:rgba(85,153,187,.12);border-color:rgba(85,153,187,.35);color:#5599bb}
+.tel-action-btn.wa{background:rgba(37,211,102,.1);border-color:rgba(37,211,102,.3);color:#25D366}
 
 /* OVERLAY / MODAL */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
@@ -128,11 +139,38 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
 .est-pill{padding:7px 14px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid transparent;transition:all .2s}
 
 
+/* TOGGLE SWITCH */
+.switch-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.switch-info{display:flex;flex-direction:column;gap:2px;min-width:0}
+.switch-lbl{font-size:13px;font-weight:600;color:var(--txt);white-space:nowrap}
+.switch-sub{font-size:10px;color:var(--dim)}
+.switch{position:relative;width:44px;height:24px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0;position:absolute}
+.switch-track{position:absolute;inset:0;background:var(--acc);border-radius:12px;cursor:pointer;transition:background .2s}
+.switch input:checked+.switch-track{background:var(--faint)}
+.switch-track::after{content:"";position:absolute;width:18px;height:18px;left:3px;top:3px;background:var(--faint);border-radius:50%;transition:transform .2s, background .2s}
+.switch input:checked+.switch-track::after{transform:translateX(20px);background:var(--acc)}
+
+/* NOMBRE + SWITCH inline row */
+.nombre-switch-row{display:flex;align-items:flex-end;gap:10px;margin-bottom:10px}
+.nombre-switch-row .field{flex:1;margin-bottom:0}
+.nombre-switch-row .switch-row{margin-bottom:0;padding-bottom:8px;flex-shrink:0}
+
 /* EMOJI GRID */
+.emoji-grid-wrap{overflow:hidden;transition:max-height .3s ease}
+.emoji-grid-wrap.collapsed{max-height:46px}
+.emoji-grid-wrap.expanded{max-height:400px}
 .emoji-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:4px}
 .emoji-opt{padding:8px 4px;border-radius:8px;border:1px solid var(--brd2);background:var(--surf);font-size:18px;text-align:center;cursor:pointer;transition:all .15s}
 .emoji-opt.act{background:var(--acc-bg);border-color:var(--acc-bd);box-shadow:0 0 0 2px var(--acc-bd)}
 .emoji-opt:active{transform:scale(.9)}
+.emoji-expand-btn{display:flex;align-items:center;justify-content:center;gap:4px;width:100%;margin-top:6px;padding:5px;background:none;border:1px solid var(--brd2);border-radius:7px;font-size:11px;font-weight:600;color:var(--dim);cursor:pointer;transition:all .2s}
+.emoji-expand-btn:active{background:var(--surf)}
+.emoji-expand-chevron{display:inline-block;transition:transform .25s;font-style:normal}
+
+/* CAPACITY WARNING */
+.cap-warn{display:none;align-items:center;gap:7px;background:rgba(180,130,0,.1);border:1px solid var(--amb-bd);border-radius:8px;padding:8px 11px;margin-top:-4px;margin-bottom:10px;font-size:11px;color:var(--amb);line-height:1.45}
+.cap-warn.show{display:flex}
 
 </style>
 </head>
@@ -180,6 +218,7 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
     <div class="mesas-pill" onclick="toggleMesas()">
       <span class="mesas-pill-num" id="mesas-num">—</span>
       <span class="mesas-pill-lbl">libres</span>
+      <svg id="mesas-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--acc);opacity:.8;transition:transform .25s;flex-shrink:0"><polyline points="6 9 12 15 18 9"/></svg>
     </div>
   </div>
 
@@ -193,7 +232,12 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
 
 <!-- EVENTOS VIEW -->
 <div id="view-ev" style="display:none;padding:20px 14px">
-  <div class="empty"><div class="empty-icon">🎉</div><div class="empty-title">Eventos</div><div class="empty-sub">Próximamente</div></div>
+  <div class="empty">
+    <div class="empty-icon">🎉</div>
+    <div class="empty-title">Sin eventos</div>
+    <div class="empty-sub">Los eventos especiales aparecerán aquí.<br>Crea el primero cuando quieras.</div>
+    <button class="empty-action">+ Nuevo evento</button>
+  </div>
 </div>
 
 <!-- ZONAS VIEW -->
@@ -229,7 +273,18 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
 
     <!-- NOMBRE + TEL -->
     <div class="field"><label>Nombre</label><input class="inp" id="e-nombre" placeholder="Familia García..."></div>
-    <div class="field"><label>Teléfono</label><input class="inp" id="e-tel" type="tel" placeholder="6XX XXX XXX"></div>
+    <div class="field">
+      <label>Teléfono</label>
+      <div class="tel-inline">
+        <input class="inp" id="e-tel" type="tel" placeholder="6XX XXX XXX" oninput="updateTelBtns()">
+        <a id="tel-call-btn" class="tel-action-btn call" style="display:none">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.77a19.79 19.79 0 01-3.07-8.63A2 2 0 012 .94h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        </a>
+        <a id="tel-wa-btn" class="tel-action-btn wa" style="display:none" target="_blank">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+      </div>
+    </div>
 
     <!-- FECHA + HORA -->
     <div class="row2">
@@ -242,17 +297,17 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
       <div class="field">
         <label>Personas</label>
         <div class="stepper-field">
-          <button class="step-btn" onclick="stepField('e-pax',-1,1,99,autoPax)">−</button>
-          <input class="inp step-inp" id="e-pax" type="number" min="1" max="99" placeholder="4" oninput="autoPax()">
-          <button class="step-btn" onclick="stepField('e-pax',1,1,99,autoPax)">+</button>
+          <button class="step-btn" onclick="stepField('e-pax',-1,1,99,checkCapacity)">−</button>
+          <input class="inp step-inp" id="e-pax" type="number" min="1" max="99" placeholder="4" oninput="autoPax();checkCapacity()">
+          <button class="step-btn" onclick="stepField('e-pax',1,1,99,checkCapacity)">+</button>
         </div>
       </div>
       <div class="field">
         <label>Mesas</label>
         <div class="stepper-field">
-          <button class="step-btn" onclick="stepField('e-mesas',-1,1,20,autoMesas)">−</button>
-          <input class="inp step-inp" id="e-mesas" type="number" min="1" max="20" placeholder="1" oninput="autoMesas()">
-          <button class="step-btn" onclick="stepField('e-mesas',1,1,20,autoMesas)">+</button>
+          <button class="step-btn" onclick="stepField('e-mesas',-1,1,20,checkCapacity)">−</button>
+          <input class="inp step-inp" id="e-mesas" type="number" min="1" max="20" placeholder="1" oninput="autoMesas();checkCapacity()">
+          <button class="step-btn" onclick="stepField('e-mesas',1,1,20,checkCapacity)">+</button>
         </div>
       </div>
     </div>
@@ -261,6 +316,12 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
     <div class="field">
       <label>Zona</label>
       <div class="zona-pills" id="e-zona-pills"></div>
+    </div>
+
+    <!-- AVISO CAPACIDAD -->
+    <div class="cap-warn" id="cap-warn">
+      <span style="font-size:16px;flex-shrink:0">⚠️</span>
+      <span id="cap-warn-txt"></span>
     </div>
 
     <!-- NOTA -->
@@ -273,7 +334,14 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
     </div>
 
     <button class="btn-confirm" onclick="saveRes()">Guardar reserva</button>
-    <button class="btn-del" id="btn-del-res" onclick="delRes()" style="display:none">Eliminar reserva</button>
+    <div id="del-confirm-row" style="display:none;margin-top:6px">
+      <div style="font-size:12px;color:var(--dim);text-align:center;margin-bottom:8px">¿Eliminar esta reserva? No se puede deshacer.</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn-del" style="flex:1;margin:0" onclick="confirmDelRes()">Sí, eliminar</button>
+        <button style="flex:1;background:transparent;border:1px solid var(--brd2);border-radius:8px;padding:10px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer" onclick="cancelDelRes()">Cancelar</button>
+      </div>
+    </div>
+    <button class="btn-del" id="btn-del-res" onclick="delRes()" style="display:none;margin-top:6px">Eliminar reserva</button>
   </div>
 </div>
 
@@ -285,34 +353,65 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
       <button class="mclose" onclick="closeModal('ov-zona')">&#215;</button>
     </div>
 
-    <!-- NOMBRE + MESAS en misma fila -->
-    <div class="row2" style="align-items:flex-end">
-      <div class="field" style="flex:2">
+    <!-- NOMBRE + SWITCH en misma fila -->
+    <div class="nombre-switch-row">
+      <div class="field">
         <label>Nombre</label>
         <input class="inp" id="z-nombre" placeholder="Terraza...">
       </div>
-      <div class="field" style="flex:1">
-        <label>Mesas</label>
+      <div class="switch-row">
+        <div class="switch-info">
+          <span class="switch-lbl">Activa</span>
+        </div>
+        <label class="switch" style="margin-left:6px">
+          <input type="checkbox" id="z-activa" checked>
+          <span class="switch-track"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- MESAS + PERSONAS en misma fila -->
+    <div class="row2" style="align-items:flex-end">
+      <div class="field">
+        <label>Mesas máx.</label>
         <div class="stepper-field">
           <button class="step-btn" onclick="stepField('z-mesas',-1,1,50,null)">−</button>
           <input class="inp step-inp" id="z-mesas" type="number" min="1" max="50" placeholder="8">
           <button class="step-btn" onclick="stepField('z-mesas',1,1,50,null)">+</button>
         </div>
       </div>
-    </div>
-
-    <!-- ICONO SELECTOR -->
-    <div class="field">
-      <label>Icono</label>
-      <div class="emoji-grid" id="emoji-grid"></div>
-      <input type="hidden" id="z-emoji" value="☀️">
-      <div style="font-size:10px;color:var(--faint);margin-top:6px;line-height:1.5">
-        💡 También puedes pegar cualquier emoji directamente en el nombre — los de WhatsApp funcionan perfectamente al ser universales.
+      <div class="field">
+        <label>Personas máx.</label>
+        <div class="stepper-field">
+          <button class="step-btn" onclick="stepField('z-pax',-1,1,200,null)">−</button>
+          <input class="inp step-inp" id="z-pax" type="number" min="1" max="200" placeholder="24">
+          <button class="step-btn" onclick="stepField('z-pax',1,1,200,null)">+</button>
+        </div>
       </div>
     </div>
 
+    <!-- ICONO SELECTOR colapsable -->
+    <div class="field">
+      <label>Icono</label>
+      <div class="emoji-grid-wrap collapsed" id="emoji-grid-wrap">
+        <div class="emoji-grid" id="emoji-grid"></div>
+      </div>
+      <input type="hidden" id="z-emoji" value="☀️">
+      <button class="emoji-expand-btn" id="emoji-expand-btn" onclick="toggleEmojiGrid()">
+        <i class="emoji-expand-chevron" id="emoji-chevron">▾</i>
+        <span id="emoji-expand-lbl">Ver más iconos</span>
+      </button>
+    </div>
+
     <button class="btn-confirm" onclick="saveZona()">Guardar zona</button>
-    <button class="btn-del" id="btn-del-zona" onclick="delZona()" style="display:none">Eliminar zona</button>
+    <div id="del-zona-confirm-row" style="display:none;margin-top:6px">
+      <div style="font-size:12px;color:var(--dim);text-align:center;margin-bottom:8px">¿Eliminar esta zona? Las reservas asociadas quedarán sin zona.</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn-del" style="flex:1;margin:0" onclick="confirmDelZona()">Sí, eliminar</button>
+        <button style="flex:1;background:transparent;border:1px solid var(--brd2);border-radius:8px;padding:10px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer" onclick="cancelDelZona()">Cancelar</button>
+      </div>
+    </div>
+    <button class="btn-del" id="btn-del-zona" onclick="delZona()" style="display:none;margin-top:6px">Eliminar zona</button>
   </div>
 </div>
 
@@ -414,6 +513,8 @@ function mesasOcupadas(){
 function toggleMesas(){
   const d=document.getElementById('mesas-detail');
   d.classList.toggle('show');
+  const ch=document.getElementById('mesas-chevron');
+  if(ch) ch.style.transform=d.classList.contains('show')?'rotate(180deg)':'rotate(0deg)';
   if(d.classList.contains('show')) renderMesasDetail();
 }
 function renderMesasDetail(){
@@ -460,7 +561,12 @@ function renderRes(){
 
   let h='';
   if(!filtered.length){
-    h=`<div class="empty"><div class="empty-icon">📅</div><div class="empty-title">Sin reservas</div><div class="empty-sub">Pulsa el botón para añadir la primera reserva.</div></div>`;
+    h=`<div class="empty">
+      <div class="empty-icon">📅</div>
+      <div class="empty-title">Sin reservas</div>
+      <div class="empty-sub">No hay reservas para este día.<br>Añade la primera cuando quieras.</div>
+      <button class="empty-action" onclick="openNewRes()">+ Nueva reserva</button>
+    </div>`;
   } else {
     const zonasToShow=curZona==='all'?zonas:zonas.filter(z=>z.id===curZona);
     zonasToShow.forEach(z=>{
@@ -547,6 +653,7 @@ function selectZona(id,el){
   document.querySelectorAll('#e-zona-pills .zona-pill').forEach(p=>p.classList.remove('act'));
   el.classList.add('act');
   document.getElementById('e-zona-pills').dataset.selected=id;
+  checkCapacity();
 }
 function getSelectedZona(){
   return parseInt(document.getElementById('e-zona-pills')?.dataset.selected)||zonas[0]?.id;
@@ -587,6 +694,8 @@ function openNewRes(){
   document.getElementById('e-nota').value='';
   delete document.getElementById('e-pax').dataset.manual;
   delete document.getElementById('e-mesas').dataset.manual;
+  const w=document.getElementById('cap-warn');if(w)w.classList.remove('show');
+  updateTelBtns();
   showModal('ov-edit');
 }
 function openEditRes(id){
@@ -597,6 +706,7 @@ function openEditRes(id){
   const z=getZona(r.zonaId);
   document.getElementById('edit-sub').textContent=(z?z.emoji+' '+z.nombre+' · ':'')+r.hora;
   document.getElementById('btn-del-res').style.display='block';
+  document.getElementById('del-confirm-row').style.display='none';
   fillZonaSelect(r.zonaId);
   fillEstadoPills(r.estado);
   document.getElementById('e-nombre').value=r.nombre;
@@ -606,6 +716,7 @@ function openEditRes(id){
   document.getElementById('e-pax').value=r.pax;
   document.getElementById('e-mesas').value=r.mesas||1;
   document.getElementById('e-nota').value=r.nota||'';
+  updateTelBtns();
   showModal('ov-edit');
 }
 function autoPax(){
@@ -616,6 +727,38 @@ function autoPax(){
 }
 function autoMesas(){
   // Never auto-fill pax from mesas — mesas is always manual
+}
+
+function checkCapacity(){
+  const warn=document.getElementById('cap-warn');
+  const txt=document.getElementById('cap-warn-txt');
+  if(!warn||!txt)return;
+  const zonaId=getSelectedZona();
+  const z=zonas.find(x=>x.id===zonaId);
+  if(!z){warn.classList.remove('show');return;}
+  const pax=parseInt(document.getElementById('e-pax').value)||0;
+  const mesas=parseInt(document.getElementById('e-mesas').value)||0;
+  const msgs=[];
+  if(z.mesas&&mesas>z.mesas) msgs.push(`supera el máximo de ${z.mesas} mesas en ${z.nombre}`);
+  if(z.pax&&pax>z.pax)       msgs.push(`supera el aforo de ${z.pax} personas en ${z.nombre}`);
+  if(msgs.length){
+    txt.textContent='Esta reserva '+msgs.join(' y ')+'. Puedes guardarla igualmente.';
+    warn.classList.add('show');
+  } else {
+    warn.classList.remove('show');
+  }
+}
+
+/* ── EMOJI GRID TOGGLE ── */
+let emojiExpanded=false;
+function toggleEmojiGrid(){
+  emojiExpanded=!emojiExpanded;
+  const wrap=document.getElementById('emoji-grid-wrap');
+  const lbl=document.getElementById('emoji-expand-lbl');
+  const chev=document.getElementById('emoji-chevron');
+  if(wrap) wrap.className='emoji-grid-wrap '+(emojiExpanded?'expanded':'collapsed');
+  if(lbl)  lbl.textContent=emojiExpanded?'Ver menos':'Ver más iconos';
+  if(chev) chev.style.transform=emojiExpanded?'rotate(180deg)':'rotate(0deg)';
 }
 function saveRes(){
   const nombre=document.getElementById('e-nombre').value.trim();
@@ -642,10 +785,17 @@ function saveRes(){
   toast(editingId?'Reserva actualizada ✓':'Reserva añadida ✓');
 }
 function delRes(){
+  document.getElementById('btn-del-res').style.display='none';
+  document.getElementById('del-confirm-row').style.display='block';
+}
+function cancelDelRes(){
+  document.getElementById('del-confirm-row').style.display='none';
+  document.getElementById('btn-del-res').style.display='block';
+}
+function confirmDelRes(){
   if(!editingId)return;
-  const r=reservas.find(x=>x.id===editingId);if(!r)return;
-  if(!confirm(`¿Eliminar reserva de ${r.nombre}?`))return;
   reservas=reservas.filter(x=>x.id!==editingId);
+  document.getElementById('del-confirm-row').style.display='none';
   closeModal('ov-edit');
   renderRes();
   toast('Reserva eliminada');
@@ -654,22 +804,34 @@ function delRes(){
 /* ── ZONAS ── */
 function renderZon(){
   const list=document.getElementById('zon-list');
-  list.innerHTML=zonas.map(z=>`
-    <div style="background:var(--surf);border:1px solid var(--brd);border-radius:10px;padding:12px 14px;margin:0 14px 8px;display:flex;align-items:center;gap:10px;cursor:pointer" onclick="openEditZona(${z.id})">
+  list.innerHTML=zonas.map(z=>{
+    const inactiva=z.activa===false;
+    return`<div style="background:var(--surf);border:1px solid ${inactiva?'var(--brd)':'var(--brd)'};border-radius:10px;padding:12px 14px;margin:0 14px 8px;display:flex;align-items:center;gap:10px;cursor:pointer;opacity:${inactiva?.5:1}" onclick="openEditZona(${z.id})">
       <span style="font-size:20px">${z.emoji}</span>
       <div style="flex:1">
-        <div style="font-size:13px;font-weight:700;color:var(--txt)">${z.nombre}</div>
-        <div style="font-size:11px;color:var(--dim)">${z.mesas} mesas</div>
+        <div style="display:flex;align-items:center;gap:7px">
+          <span style="font-size:13px;font-weight:700;color:var(--txt)">${z.nombre}</span>
+          ${inactiva?'<span style="font-size:9px;font-weight:700;background:var(--red-bg);border:1px solid var(--red-bd);color:var(--red);border-radius:4px;padding:1px 6px;letter-spacing:.4px">INACTIVA</span>':''}
+        </div>
+        <div style="font-size:11px;color:var(--dim)">${z.mesas} mesas${z.pax?' · '+z.pax+' personas':''}</div>
       </div>
       <span style="color:var(--faint);font-size:18px">›</span>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 function openNewZona(){
   editingZonaId=null;
   document.getElementById('zona-title').textContent='Nueva zona';
   document.getElementById('btn-del-zona').style.display='none';
+  document.getElementById('del-zona-confirm-row').style.display='none';
   document.getElementById('z-nombre').value='';
   document.getElementById('z-mesas').value='';
+  document.getElementById('z-pax').value='';
+  document.getElementById('z-activa').checked=true;
+  emojiExpanded=false;
+  const wrap=document.getElementById('emoji-grid-wrap');if(wrap)wrap.className='emoji-grid-wrap collapsed';
+  const lbl=document.getElementById('emoji-expand-lbl');if(lbl)lbl.textContent='Ver más iconos';
+  const chev=document.getElementById('emoji-chevron');if(chev)chev.style.transform='rotate(0deg)';
   renderEmojiGrid('☀️');
   showModal('ov-zona');
 }
@@ -678,15 +840,28 @@ function openEditZona(id){
   editingZonaId=id;
   document.getElementById('zona-title').textContent='Editar zona';
   document.getElementById('btn-del-zona').style.display='block';
+  document.getElementById('del-zona-confirm-row').style.display='none';
   document.getElementById('z-nombre').value=z.nombre;
   document.getElementById('z-mesas').value=z.mesas;
+  document.getElementById('z-pax').value=z.pax||'';
+  document.getElementById('z-activa').checked=z.activa!==false;
+  emojiExpanded=false;
+  const wrap=document.getElementById('emoji-grid-wrap');if(wrap)wrap.className='emoji-grid-wrap collapsed';
+  const lbl=document.getElementById('emoji-expand-lbl');if(lbl)lbl.textContent='Ver más iconos';
+  const chev=document.getElementById('emoji-chevron');if(chev)chev.style.transform='rotate(0deg)';
   renderEmojiGrid(z.emoji);
   showModal('ov-zona');
 }
 function saveZona(){
   const nombre=document.getElementById('z-nombre').value.trim();
   if(!nombre){toast('Introduce un nombre');return;}
-  const data={nombre,emoji:selectedEmoji||document.getElementById('z-emoji').value||'📍',mesas:parseInt(document.getElementById('z-mesas').value)||1};
+  const data={
+    nombre,
+    emoji:selectedEmoji||document.getElementById('z-emoji').value||'📍',
+    mesas:parseInt(document.getElementById('z-mesas').value)||1,
+    pax:parseInt(document.getElementById('z-pax').value)||null,
+    activa:document.getElementById('z-activa').checked,
+  };
   if(editingZonaId){
     const z=zonas.find(x=>x.id===editingZonaId);
     if(z) Object.assign(z,data);
@@ -696,28 +871,55 @@ function saveZona(){
   }
   closeModal('ov-zona');
   renderZon();
+  rebuildZonaBar();
   toast('Zona guardada ✓');
 }
 function rebuildZonaBar(){
   const bar=document.getElementById('zona-bar');
   if(!bar) return;
-  // Set grid columns = 1 (Todo) + zones count
-  const cols=1+zonas.length;
-  bar.style.gridTemplateColumns=`repeat(${cols},1fr)`;
-  // Rebuild all pills
+  const activas=zonas.filter(z=>z.activa!==false);
   bar.innerHTML=`<div class="zpill act" onclick="setZona('all',this)"><span class="zpill-icon">✦</span><span class="zpill-txt">Todo</span></div>`+
-    zonas.map(z=>`<div class="zpill" onclick="setZona(${z.id},this)"><span class="zpill-icon">${z.emoji}</span><span class="zpill-txt">${z.nombre}</span></div>`).join('');
-  // Reapply active state
+    activas.map(z=>`<div class="zpill" onclick="setZona(${z.id},this)"><span class="zpill-icon">${z.emoji}</span><span class="zpill-txt">${z.nombre}</span></div>`).join('');
+  // If curZona is now inactive, reset to all
+  if(curZona!=='all' && !activas.find(z=>z.id===curZona)){
+    curZona='all';
+  }
   setZona(curZona, bar.querySelector('.zpill.act')||bar.firstChild);
 }
 
 function delZona(){
+  document.getElementById('btn-del-zona').style.display='none';
+  document.getElementById('del-zona-confirm-row').style.display='block';
+}
+function cancelDelZona(){
+  document.getElementById('del-zona-confirm-row').style.display='none';
+  document.getElementById('btn-del-zona').style.display='block';
+}
+function confirmDelZona(){
   if(!editingZonaId)return;
   zonas=zonas.filter(x=>x.id!==editingZonaId);
+  document.getElementById('del-zona-confirm-row').style.display='none';
   closeModal('ov-zona');
   renderZon();
   rebuildZonaBar();
   toast('Zona eliminada');
+}
+
+function updateTelBtns(){
+  const raw=document.getElementById('e-tel').value.trim();
+  const clean=raw.replace(/\D/g,'');
+  const callBtn=document.getElementById('tel-call-btn');
+  const waBtn=document.getElementById('tel-wa-btn');
+  if(!callBtn||!waBtn)return;
+  if(clean.length>=9){
+    callBtn.href='tel:+34'+clean;
+    waBtn.href='https://wa.me/34'+clean;
+    callBtn.style.display='flex';
+    waBtn.style.display='flex';
+  } else {
+    callBtn.style.display='none';
+    waBtn.style.display='none';
+  }
 }
 
 /* ── MODAL ── */

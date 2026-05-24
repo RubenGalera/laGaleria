@@ -80,6 +80,10 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
 .cpill-lim.act{background:#0a1e24;border-color:#50b4c8;color:#80d4e8}
 .cpill-mat{border-color:rgba(180,130,50,.4);color:#c89030}
 .cpill-mat.act{background:#1e1408;border-color:#b48232;color:#d4a850}
+.cpill-rep{border-color:rgba(180,50,50,.5);color:var(--red)}
+.cpill-rep.act{background:rgba(180,50,50,.18);border-color:var(--red);color:#e86060}
+.cpill-rep-count{font-size:10px;font-weight:800;background:rgba(180,50,50,.25);border-radius:10px;padding:1px 5px;margin-left:1px;display:none}
+.cpill-rep-count.show{display:inline}
 
 /* TOOLBAR — espaciado unificado para todas las vistas */
 .toolbar{display:flex;align-items:center;justify-content:space-between;padding:12px 14px}
@@ -303,6 +307,7 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
     <div class="cpill cpill-ali" onclick="setCat('ali',this)">🥩 <span class="cpill-lbl">Alimentación</span></div>
     <div class="cpill cpill-lim" onclick="setCat('lim',this)">🧴 <span class="cpill-lbl">Limpieza</span></div>
     <div class="cpill cpill-mat" onclick="setCat('mat',this)">📦 <span class="cpill-lbl">Material</span></div>
+    <div class="cpill cpill-rep" onclick="setCat('rep',this)">⚠ <span class="cpill-lbl">Reponer</span><span class="cpill-rep-count" id="rep-count"></span></div>
     </div><!-- end cat-bar -->
     <!-- INV BANNER inside sticky header -->
     <div class="inv-banner" id="inv-banner">
@@ -707,6 +712,40 @@ function render(){
   const list=document.getElementById("prod-list");
   list.innerHTML="";
 
+  // Update Reponer pill count badge
+  const repProds=prods.filter(p=>sc(p)!=="grn");
+  const repCount=document.getElementById("rep-count");
+  if(repCount){
+    repCount.textContent=repProds.length;
+    repCount.classList.toggle("show",repProds.length>0);
+  }
+
+  // Reponer tab: show only red+amb products across all categories
+  if(curCat==="rep"){
+    if(!repProds.length){
+      const empty=document.createElement("div");
+      empty.style.cssText="text-align:center;padding:60px 20px";
+      empty.innerHTML=`<div style="font-size:42px;margin-bottom:14px">✅</div>
+        <div style="font-size:16px;font-weight:700;color:var(--txt);margin-bottom:6px">¡Todo al día!</div>
+        <div style="font-size:13px;color:var(--dim)">No hay productos bajo mínimos.</div>`;
+      list.appendChild(empty);
+    } else {
+      // Red first, then amber
+      const reds=repProds.filter(p=>sc(p)==="red");
+      const ambs=repProds.filter(p=>sc(p)==="amb");
+      if(reds.length){
+        list.appendChild(secHdr("🔴 Crítico — agotado o muy bajo",reds.length,true));
+        reds.forEach(p=>list.appendChild(prodEl(p)));
+      }
+      if(ambs.length){
+        list.appendChild(secHdr("🟡 Bajo mínimo",ambs.length,false,"amber"));
+        ambs.forEach(p=>list.appendChild(prodEl(p)));
+      }
+    }
+    updatePedBadge();
+    return;
+  }
+
   // Dynamic alert count for current filter
   const alertProds = curCat==="all"
     ? prods.filter(p=>sc(p)!=="grn")
@@ -733,11 +772,15 @@ function render(){
   updatePedBadge();
 }
 
-function secHdr(label,count,isAlert){
+function secHdr(label,count,isAlert,variant){
   const d=document.createElement("div");
   d.className="sec-hdr"+(isAlert?" alert":"");
   let lnClr="var(--brd)", lblClr="", badgeSt="";
-  if(isAlert){
+  if(variant==="amber"){
+    lnClr="rgba(180,130,0,.4)";
+    lblClr="color:var(--amb)";
+    badgeSt="background:rgba(180,130,0,.2);border:1px solid rgba(180,130,0,.5);color:var(--amb)";
+  } else if(isAlert){
     const hasRed=prods.some(p=>sc(p)==="red");
     const c=hasRed?"180,50,50":"180,130,0";
     const cv=hasRed?"var(--red)":"var(--amb)";
@@ -882,8 +925,8 @@ function sendWA(){
 }
 
 function showModal(){
-  // Pre-select current category if not "all"
-  if(curCat!=="all"){
+  // Pre-select current category if not "all" or "rep"
+  if(curCat!=="all" && curCat!=="rep"){
     document.getElementById("np-c").value=curCat;
   }
   document.getElementById("modal-bg").classList.add("show");
