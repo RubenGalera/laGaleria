@@ -32,7 +32,8 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
 .zpill-txt{display:none;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 @media(min-width:480px){.zpill-txt{display:inline}}
 
-/* DATE NAV */
+/* TURNO sec-hdr labels */
+.sec-turno{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
 .date-nav{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 6px;gap:8px}
 .date-nav-center{display:flex;align-items:center;gap:8px}
 .date-main{font-size:13px;font-weight:700;color:var(--txt)}
@@ -43,19 +44,29 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
 .mesas-pill-num{font-size:13px;font-weight:700;color:var(--acc)}
 .mesas-pill-lbl{font-size:11px;color:var(--acc);opacity:.8}
 
-/* MESAS DETAIL */
+/* MESAS DETAIL — two columns */
 .mesas-detail{margin:0 14px 8px;background:var(--surf);border:1px solid var(--brd);border-radius:10px;overflow:hidden;display:none}
 .mesas-detail.show{display:block}
-.mz-row{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;border-bottom:1px solid var(--brd)}
+.mz-cols{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--brd)}
+.mz-col-hdr{padding:7px 14px;font-size:10px;font-weight:700;color:var(--dim);letter-spacing:.8px;text-transform:uppercase;border-bottom:1px solid var(--brd)}
+.mz-col-hdr:first-child{border-right:1px solid var(--brd)}
+.mz-row{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--brd)}
 .mz-row:last-child{border-bottom:none}
-.mz-name{font-size:12px;font-weight:600;color:var(--txt)}
-.mz-count{font-size:12px;font-weight:700;color:var(--acc)}
+.mz-cell{padding:8px 14px;display:flex;align-items:center;justify-content:space-between;gap:6px}
+.mz-cell:first-child{border-right:1px solid var(--brd)}
+.mz-name{font-size:12px;font-weight:600;color:var(--txt);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mz-count{font-size:12px;font-weight:700;flex-shrink:0}
 
-/* SEC HDR */
+/* SEC HDR — zona (nivel menor) */
 .sec-hdr{display:flex;align-items:center;gap:10px;padding:10px 14px 6px}
 .sec-line{flex:1;height:1px;background:var(--brd)}
 .sec-lbl{font-size:10px;font-weight:700;color:var(--dim);letter-spacing:1px;text-transform:uppercase;white-space:nowrap;display:flex;align-items:center;gap:6px}
 .sec-badge{background:var(--surf);border:1px solid var(--brd2);color:var(--muted);border-radius:10px;font-size:11px;font-weight:700;padding:1px 7px}
+
+/* TURNO HDR — label flotante minimalista */
+.turno-hdr{padding:18px 14px 4px;display:flex;align-items:center;gap:8px}
+.turno-hdr-label{font-size:11px;font-weight:600;color:var(--dim);letter-spacing:.8px;text-transform:uppercase}
+.turno-hdr-badge{font-size:11px;font-weight:600;color:var(--faint)}
 
 /* RES CARD */
 .res-card{background:var(--surf);border:1px solid var(--brd);border-radius:10px;padding:10px 12px 10px 16px;margin:0 14px 8px;cursor:pointer;transition:border-color .2s;position:relative;overflow:hidden}
@@ -71,12 +82,14 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
 .add-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;border-radius:10px;background:transparent;border:1.5px dashed var(--acc-bd);color:var(--acc);font-size:13px;font-weight:600;cursor:pointer;margin:4px 0}
 
 /* EMPTY STATE — shared component */
-.empty{text-align:center;padding:48px 20px 32px}
+.empty{text-align:center;padding:40px 20px 24px}
 .empty-icon{font-size:36px;margin-bottom:12px}
 .empty-title{font-size:15px;font-weight:700;color:var(--txt);margin-bottom:6px}
-.empty-sub{font-size:12px;color:var(--dim);line-height:1.5;margin-bottom:20px}
+.empty-sub{font-size:12px;color:var(--dim);line-height:1.5}
 .empty-action{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px 22px;border-radius:10px;background:transparent;border:1.5px dashed var(--acc-bd);color:var(--acc);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
 .empty-action:active{background:var(--acc-bg)}
+/* TAB FOOTER — shared add button wrapper */
+.tab-footer{padding:16px 14px 14px}
 
 /* TEL inline with call/wa buttons */
 .tel-inline{display:flex;align-items:center;gap:6px}
@@ -98,8 +111,9 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
 /* FORM */
 .field{margin-bottom:10px}
 .field label{display:block;font-size:11px;font-weight:600;color:var(--dim);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
-.inp{width:100%;background:var(--bg);border:1px solid var(--brd2);border-radius:8px;padding:9px 12px;color:var(--txt);font-size:13px;outline:none}
+.inp{width:100%;background:var(--bg);border:1px solid var(--brd2);border-radius:8px;padding:9px 12px;color:var(--txt);font-size:13px;outline:none;appearance:none;-webkit-appearance:none}
 .inp:focus{border-color:var(--acc-bd)}
+select.inp{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237a8f96' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .btn-confirm{background:var(--acc);border:none;border-radius:8px;padding:12px;width:100%;font-size:13px;font-weight:700;color:#1a1810;cursor:pointer;margin-top:8px}
 .btn-confirm:active{opacity:.85}
@@ -109,9 +123,9 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
 .est-pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
 .est-pill{padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid transparent;transition:all .2s}
 .info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
-.info-box{background:var(--bg);border-radius:8px;padding:10px;text-align:center}
-.info-val{font-size:18px;font-weight:700;color:var(--acc)}
-.info-lbl{font-size:10px;color:var(--dim);margin-top:2px}
+.info-box{background:var(--bg);border-radius:8px;padding:10px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60px}
+.info-val{font-size:18px;font-weight:700;color:var(--acc);line-height:1.2}
+.info-lbl{font-size:10px;color:var(--dim);margin-top:3px}
 .tel-row{display:flex;align-items:center;gap:10px;background:var(--bg);border-radius:8px;padding:10px 12px}
 .tel-num{font-size:13px;font-weight:600;color:var(--txt);flex:1}
 .tel-actions{display:flex;gap:8px}
@@ -146,10 +160,10 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
 .switch-sub{font-size:10px;color:var(--dim)}
 .switch{position:relative;width:44px;height:24px;flex-shrink:0}
 .switch input{opacity:0;width:0;height:0;position:absolute}
-.switch-track{position:absolute;inset:0;background:var(--acc);border-radius:12px;cursor:pointer;transition:background .2s}
-.switch input:checked+.switch-track{background:var(--faint)}
-.switch-track::after{content:"";position:absolute;width:18px;height:18px;left:3px;top:3px;background:var(--faint);border-radius:50%;transition:transform .2s, background .2s}
-.switch input:checked+.switch-track::after{transform:translateX(20px);background:var(--acc)}
+.switch-track{position:absolute;inset:0;background:var(--brd2);border-radius:12px;cursor:pointer;transition:background .2s}
+.switch input:checked+.switch-track{background:var(--acc)}
+.switch-track::after{content:"";position:absolute;width:18px;height:18px;left:3px;top:3px;background:var(--acc);border-radius:50%;transition:transform .2s,background .2s}
+.switch input:checked+.switch-track::after{transform:translateX(20px);background:var(--brd2)}
 
 /* NOMBRE + SWITCH inline row */
 .nombre-switch-row{display:flex;align-items:flex-end;gap:10px;margin-bottom:10px}
@@ -168,7 +182,28 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
 .emoji-expand-btn:active{background:var(--surf)}
 .emoji-expand-chevron{display:inline-block;transition:transform .25s;font-style:normal}
 
+/* EVENTO CARD */
+.ev-card{background:var(--surf);border:1px solid var(--brd);border-radius:10px;margin:0 14px 8px;cursor:pointer;transition:opacity .2s;display:flex;align-items:center;gap:12px;padding:12px 14px}
+.ev-list-wrap{padding-top:10px}
+.ev-card:active{opacity:.75}
+.ev-card-icon{font-size:22px;flex-shrink:0;line-height:1}
+.ev-card-body{flex:1;min-width:0}
+.ev-card-name{font-size:13px;font-weight:700;color:var(--txt);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev-card-meta{display:flex;flex-wrap:wrap;gap:3px 8px}
+.ev-card-meta span{font-size:11px;color:var(--muted)}
+.ev-card-zonas{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.ev-zona-tag{font-size:10px;font-weight:600;background:var(--red-bg);border:1px solid var(--red-bd);color:var(--red);border-radius:6px;padding:1px 7px}
+
+/* ASISTENTE ROW */
+.asi-row{display:flex;align-items:center;gap:10px;background:var(--bg);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer}
+.asi-row:active{opacity:.8}
+.asi-info{flex:1;min-width:0}
+.asi-name{font-size:13px;font-weight:600;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.asi-sub{font-size:11px;color:var(--dim);margin-top:1px}
+.asi-pago{font-size:11px;font-weight:700;flex-shrink:0;padding:3px 9px;border-radius:10px}
+
 /* CAPACITY WARNING */
+
 .cap-warn{display:none;align-items:center;gap:7px;background:rgba(180,130,0,.1);border:1px solid var(--amb-bd);border-radius:8px;padding:8px 11px;margin-top:-4px;margin-bottom:10px;font-size:11px;color:var(--amb);line-height:1.45}
 .cap-warn.show{display:flex}
 
@@ -216,7 +251,9 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
       <button class="nav-arrow" onclick="changeDay(1)">&#8250;</button>
     </div>
     <div class="mesas-pill" onclick="toggleMesas()">
-      <span class="mesas-pill-num" id="mesas-num">—</span>
+      <span class="mesas-pill-num" id="mesas-num-mid">—</span>
+      <span class="mesas-pill-lbl">·</span>
+      <span class="mesas-pill-num" id="mesas-num-noc">—</span>
       <span class="mesas-pill-lbl">libres</span>
       <svg id="mesas-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--acc);opacity:.8;transition:transform .25s;flex-shrink:0"><polyline points="6 9 12 15 18 9"/></svg>
     </div>
@@ -231,19 +268,29 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
 </div>
 
 <!-- EVENTOS VIEW -->
-<div id="view-ev" style="display:none;padding:20px 14px">
-  <div class="empty">
-    <div class="empty-icon">🎉</div>
-    <div class="empty-title">Sin eventos</div>
-    <div class="empty-sub">Los eventos especiales aparecerán aquí.<br>Crea el primero cuando quieras.</div>
-    <button class="empty-action">+ Nuevo evento</button>
+<div id="view-ev" style="display:none">
+  <div class="ev-list-wrap">
+    <div id="ev-list"></div>
+    <div id="ev-empty" class="empty">
+      <div class="empty-icon">🎉</div>
+      <div class="empty-title">Sin eventos</div>
+      <div class="empty-sub">Los eventos especiales aparecerán aquí.<br>Crea el primero cuando quieras.</div>
+    </div>
   </div>
+  <div class="tab-footer"><button class="add-btn" onclick="openNewEvento()">+ Nuevo evento</button></div>
 </div>
 
 <!-- ZONAS VIEW -->
 <div id="view-zon" style="display:none">
-  <div id="zon-list" style="padding:10px 0"></div>
-  <div style="padding:0 14px 14px"><button class="add-btn" onclick="openNewZona()">+ Nueva zona</button></div>
+  <div style="padding-top:10px">
+    <div id="zon-list"></div>
+    <div id="zon-empty" class="empty">
+      <div class="empty-icon">🗂️</div>
+      <div class="empty-title">Sin zonas</div>
+      <div class="empty-sub">Organiza el local por zonas: terraza, sala, barra…<br>Crea la primera cuando quieras.</div>
+    </div>
+  </div>
+  <div class="tab-footer"><button class="add-btn" onclick="openNewZona()">+ Nueva zona</button></div>
 </div>
 
 <!-- DETAIL OVERLAY -->
@@ -415,11 +462,145 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
   </div>
 </div>
 
+<!-- EVENTO EDIT OVERLAY -->
+<div class="overlay" id="ov-evento" onclick="if(event.target===this)closeModal('ov-evento')">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div><div class="modal-title" id="ev-modal-title">Nuevo evento</div></div>
+      <button class="mclose" onclick="closeModal('ov-evento')">&#215;</button>
+    </div>
+    <!-- NOMBRE -->
+    <div class="field"><label>Nombre del evento</label><input class="inp" id="ev-nombre" placeholder="Cena maridaje primavera..."></div>
+    <!-- TIPO (select con icono) -->
+    <div class="field">
+      <label>Tipo</label>
+      <div style="position:relative">
+        <span id="ev-tipo-icon" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none">🎉</span>
+        <select class="inp" id="ev-tipo" style="padding-left:32px" onchange="updateEvTipoIcon()">
+          <option value="cata">Cata</option>
+          <option value="menu">Menú especial</option>
+          <option value="evento" selected>Evento</option>
+        </select>
+      </div>
+    </div>
+    <!-- FECHA + HORA -->
+    <div class="row2">
+      <div class="field"><label>Fecha</label><input class="inp" id="ev-fecha" type="date"></div>
+      <div class="field"><label>Hora</label><input class="inp" id="ev-hora" type="time"></div>
+    </div>
+    <!-- PRECIO + AFORO -->
+    <div class="row2">
+      <div class="field"><label>Precio / persona</label><input class="inp" id="ev-precio" type="number" min="0" placeholder="35"></div>
+      <div class="field"><label>Aforo máx.</label><input class="inp" id="ev-aforo" type="number" min="1" placeholder="50"></div>
+    </div>
+    <!-- ZONAS -->
+    <div class="field">
+      <label>Zonas ocupadas</label>
+      <div class="zona-pills" id="ev-zona-pills"></div>
+    </div>
+    <!-- IMAGEN -->
+    <div class="field">
+      <label>Imagen (cartel / menú)</label>
+      <div id="ev-img-wrap" style="position:relative">
+        <input type="file" id="ev-img-input" accept="image/*" style="display:none" onchange="loadEvImg(this)">
+        <div id="ev-img-preview" style="display:none;position:relative;border-radius:8px;overflow:hidden;margin-bottom:6px">
+          <img id="ev-img-el" style="width:100%;max-height:180px;object-fit:cover;display:block;border-radius:8px">
+          <button onclick="clearEvImg()" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,.6);border:none;border-radius:50%;width:26px;height:26px;color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+        </div>
+        <button class="add-btn" style="margin:0" onclick="document.getElementById('ev-img-input').click()">📷 Añadir imagen</button>
+      </div>
+    </div>
+    <button class="btn-confirm" onclick="saveEvento()">Guardar evento</button>
+    <div id="del-ev-confirm-row" style="display:none;margin-top:6px">
+      <div style="font-size:12px;color:var(--dim);text-align:center;margin-bottom:8px">¿Eliminar este evento?</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn-del" style="flex:1;margin:0" onclick="confirmDelEvento()">Sí, eliminar</button>
+        <button style="flex:1;background:transparent;border:1px solid var(--brd2);border-radius:8px;padding:10px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer" onclick="cancelDelEvento()">Cancelar</button>
+      </div>
+    </div>
+    <button class="btn-del" id="btn-del-evento" onclick="delEvento()" style="display:none;margin-top:6px">Eliminar evento</button>
+  </div>
+</div>
+
+<!-- EVENTO DETAIL OVERLAY -->
+<div class="overlay" id="ov-ev-detail" onclick="if(event.target===this)closeModal('ov-ev-detail')">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div>
+        <div class="modal-title" id="evd-nombre"></div>
+        <div class="modal-sub" id="evd-sub"></div>
+      </div>
+      <button class="mclose" onclick="closeModal('ov-ev-detail')">&#215;</button>
+    </div>
+    <!-- imagen si existe -->
+    <div id="evd-img-wrap" style="display:none;margin-bottom:12px;border-radius:10px;overflow:hidden;cursor:pointer" onclick="openImgFull()">
+      <img id="evd-img" style="width:100%;max-height:160px;object-fit:cover;display:block">
+      <div style="text-align:center;font-size:10px;color:var(--dim);padding:4px 0">Toca para ampliar</div>
+    </div>
+    <!-- stats -->
+    <div class="info-grid" id="evd-stats"></div>
+    <!-- asistentes -->
+    <div id="evd-asistentes"></div>
+    <div style="margin-top:8px"><button class="add-btn" onclick="openNewAsistente()">+ Añadir asistente</button></div>
+    <div style="margin-top:8px;display:flex;gap:8px">
+      <button class="btn-confirm" style="flex:1;margin:0" onclick="openEditEventoFromDetail()">✏ Editar evento</button>
+    </div>
+  </div>
+</div>
+
+<!-- ASISTENTE EDIT OVERLAY -->
+<div class="overlay" id="ov-asistente" onclick="if(event.target===this)closeModal('ov-asistente')">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div><div class="modal-title" id="asi-modal-title">Asistente</div></div>
+      <button class="mclose" onclick="closeModal('ov-asistente')">&#215;</button>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Nombre</label><input class="inp" id="asi-nombre" placeholder="Ana Martínez..."></div>
+      <div class="field">
+        <label>Acompañantes</label>
+        <div class="stepper-field">
+          <button class="step-btn" onclick="stepField('asi-acomp',-1,0,20,null)">−</button>
+          <input class="inp step-inp" id="asi-acomp" type="number" min="0" max="20" value="0">
+          <button class="step-btn" onclick="stepField('asi-acomp',1,0,20,null)">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>Pago</label>
+        <div class="zona-pills" id="asi-pago-pills">
+          <div class="zona-pill act" data-p="pendiente" onclick="selectAsiPago('pendiente',this)">⏳ Pendiente</div>
+          <div class="zona-pill" data-p="pagado" onclick="selectAsiPago('pagado',this)">✅ Pagado</div>
+        </div>
+      </div>
+      <div class="field" id="asi-metodo-wrap">
+        <label>Método</label>
+        <div class="zona-pills" id="asi-metodo-pills">
+          <div class="zona-pill" data-m="efectivo"      onclick="selectAsiMetodo('efectivo',this)">💵 Efectivo</div>
+          <div class="zona-pill" data-m="visa"          onclick="selectAsiMetodo('visa',this)">💳 Visa</div>
+          <div class="zona-pill" data-m="bizum"         onclick="selectAsiMetodo('bizum',this)">📱 Bizum</div>
+          <div class="zona-pill" data-m="transferencia" onclick="selectAsiMetodo('transferencia',this)">🏦 Transfer.</div>
+        </div>
+      </div>
+    </div>
+    <div class="field"><label>Nota</label><input class="inp" id="asi-nota" placeholder="Alergia, petición especial..."></div>
+    <button class="btn-confirm" onclick="saveAsistente()">Guardar</button>
+    <button class="btn-del" id="btn-del-asi" onclick="confirmDelAsistente()" style="display:none;margin-top:6px">Eliminar asistente</button>
+  </div>
+</div>
+
+<!-- IMAGEN FULLSCREEN -->
+<div class="overlay" id="ov-img-full" onclick="closeModal('ov-img-full')" style="padding:0;background:rgba(0,0,0,.92)">
+  <img id="img-full-el" style="max-width:100%;max-height:100%;object-fit:contain">
+</div>
+
 <script>
 /* ── DATA ── */
 const PAX_PER_MESA = 3;
+const TURNOS = { mid:{label:'Mediodía', from:'00:00', to:'17:00'}, noc:{label:'Noche', from:'17:00', to:'23:59'} };
 let curZona = 'all', curDay = '', editingId = null, editingZonaId = null;
-let nid = 100;
+let nid = 300;
 
 const ESTADOS = {
   pagada:    {label:'Pagada',    color:'#4a9a5a', bg:'rgba(60,140,70,.15)',   bd:'rgba(60,140,70,.4)'},
@@ -446,6 +627,7 @@ let reservas = [
   {id:3, nombre:'Cumple Laura',      tel:'699 345 678', fecha:hoyStr(), hora:'20:00', pax:10,mesas:3, zonaId:4, estado:'confirmada', nota:'Tarta de cumpleaños'},
   {id:4, nombre:'Ana Torres',        tel:'677 456 789', fecha:hoyStr(), hora:'21:30', pax:2, mesas:1, zonaId:5, estado:'pendiente',  nota:''},
   {id:5, nombre:'Reserva Mañana',    tel:'600 000 001', fecha:manaStr(),hora:'13:00', pax:4, mesas:1, zonaId:2, estado:'confirmada', nota:''},
+  {id:6, nombre:'Almuerzo Pérez',    tel:'611 222 333', fecha:hoyStr(), hora:'13:30', pax:3, mesas:1, zonaId:3, estado:'confirmada', nota:''},
 ];
 
 /* ── UTILS ── */
@@ -468,6 +650,7 @@ function setTab(t){
     document.getElementById('view-'+x).style.display=x===t?'':'none';
   });
   if(t==='res') renderRes();
+  if(t==='ev')  renderEventos();
   if(t==='zon') renderZon();
 }
 
@@ -504,11 +687,12 @@ function setZona(id,el){
 }
 
 /* ── MESAS ── */
+function turnoDeHora(hora){ return (!hora||hora>='17:00')?'noc':'mid'; }
 function totalMesas(){return zonas.reduce((s,z)=>s+z.mesas,0);}
-function mesasOcupadas(){
+function mesasOcupadasPorTurno(turno){
   return reservas
-    .filter(r=>r.fecha===curDay && r.estado!=='cancelada' && r.estado!=='libre')
-    .reduce((s,r)=>s+( r.mesas||1),0);
+    .filter(r=>r.fecha===curDay && turnoDeHora(r.hora)===turno && r.estado!=='cancelada' && r.estado!=='libre')
+    .reduce((s,r)=>s+(r.mesas||1),0);
 }
 function toggleMesas(){
   const d=document.getElementById('mesas-detail');
@@ -519,16 +703,34 @@ function toggleMesas(){
 }
 function renderMesasDetail(){
   const el=document.getElementById('mesas-detail');
-  el.innerHTML=zonas.map(z=>{
-    const ocp=reservas.filter(r=>r.fecha===curDay&&r.zonaId===z.id&&r.estado!=='cancelada'&&r.estado!=='libre').reduce((s,r)=>s+(r.mesas||1),0);
-    const lib=z.mesas-ocp;
-    return`<div class="mz-row"><span class="mz-name">${z.emoji} ${z.nombre}</span><span class="mz-count" style="color:${lib>0?'var(--grn)':'var(--red)'}">${lib} / ${z.mesas}</span></div>`;
+  const total=totalMesas();
+  const libMid=total-mesasOcupadasPorTurno('mid');
+  const libNoc=total-mesasOcupadasPorTurno('noc');
+  const hdr=`<div class="mz-cols">
+    <div class="mz-col-hdr">🌤 Mediodía · <span style="color:${libMid>0?'var(--grn)':'var(--red)'};">${libMid} libres</span></div>
+    <div class="mz-col-hdr">🌙 Noche · <span style="color:${libNoc>0?'var(--grn)':'var(--red)'};">${libNoc} libres</span></div>
+  </div>`;
+  const rows=zonas.map(z=>{
+    const ocpMid=reservas.filter(r=>r.fecha===curDay&&turnoDeHora(r.hora)==='mid'&&r.zonaId===z.id&&r.estado!=='cancelada'&&r.estado!=='libre').reduce((s,r)=>s+(r.mesas||1),0);
+    const ocpNoc=reservas.filter(r=>r.fecha===curDay&&turnoDeHora(r.hora)==='noc'&&r.zonaId===z.id&&r.estado!=='cancelada'&&r.estado!=='libre').reduce((s,r)=>s+(r.mesas||1),0);
+    const lMid=z.mesas-ocpMid, lNoc=z.mesas-ocpNoc;
+    return`<div class="mz-row">
+      <div class="mz-cell"><span class="mz-name">${z.emoji} ${z.nombre}</span><span class="mz-count" style="color:${lMid>0?'var(--grn)':'var(--red)'}">${lMid}/${z.mesas}</span></div>
+      <div class="mz-cell"><span class="mz-name">${z.emoji} ${z.nombre}</span><span class="mz-count" style="color:${lNoc>0?'var(--grn)':'var(--red)'}">${lNoc}/${z.mesas}</span></div>
+    </div>`;
   }).join('');
+  el.innerHTML=hdr+rows;
 }
 function updateMesasPill(){
-  const lib=totalMesas()-mesasOcupadas();
-  const el=document.getElementById('mesas-num');
-  if(el) el.textContent=lib;
+  const total=totalMesas();
+  const libMid=total-mesasOcupadasPorTurno('mid');
+  const libNoc=total-mesasOcupadasPorTurno('noc');
+  const elMid=document.getElementById('mesas-num-mid');
+  const elNoc=document.getElementById('mesas-num-noc');
+  if(elMid) elMid.textContent='🌤'+libMid;
+  if(elNoc) elNoc.textContent='🌙'+libNoc;
+  const d=document.getElementById('mesas-detail');
+  if(d&&d.classList.contains('show')) renderMesasDetail();
 }
 
 /* ── RENDER RESERVAS ── */
@@ -556,31 +758,29 @@ function resCard(r){
 function renderRes(){
   updateMesasPill();
   const list=document.getElementById('res-list');
-  const dayRes=reservas.filter(r=>r.fecha===curDay).sort((a,b)=>a.hora.localeCompare(b.hora));
-  const filtered=curZona==='all'?dayRes:dayRes.filter(r=>r.zonaId===curZona);
+  const zonasToShow=curZona==='all'?zonas:zonas.filter(z=>z.id===curZona);
 
-  let h='';
-  if(!filtered.length){
-    h=`<div class="empty">
-      <div class="empty-icon">📅</div>
-      <div class="empty-title">Sin reservas</div>
-      <div class="empty-sub">No hay reservas para este día.<br>Añade la primera cuando quieras.</div>
-      <button class="empty-action" onclick="openNewRes()">+ Nueva reserva</button>
-    </div>`;
-  } else {
-    const zonasToShow=curZona==='all'?zonas:zonas.filter(z=>z.id===curZona);
-    zonasToShow.forEach(z=>{
-      const zRes=filtered.filter(r=>r.zonaId===z.id);
-      if(!zRes.length) return;
-      h+=secHdr(z.emoji+' '+z.nombre, zRes.length);
-      h+=zRes.map(r=>resCard(r)).join('');
-    });
-    const noZona=filtered.filter(r=>!zonas.find(z=>z.id===r.zonaId));
-    if(noZona.length){h+=secHdr('📍 Sin zona',noZona.length);h+=noZona.map(r=>resCard(r)).join('');}
+  function buildTurno(turno){
+    const label=turno==='mid'?'🌤 Mediodía':'🌙 Noche';
+    const dayRes=reservas.filter(r=>r.fecha===curDay&&turnoDeHora(r.hora)===turno).sort((a,b)=>a.hora.localeCompare(b.hora));
+    const filtered=curZona==='all'?dayRes:dayRes.filter(r=>r.zonaId===curZona);
+    let h=`<div class="turno-hdr"><span class="turno-hdr-label">${label}</span><span class="turno-hdr-badge">· ${filtered.length}</span></div>`;
+    if(!filtered.length){
+      h+=`<div style="text-align:center;padding:18px 20px;font-size:12px;color:var(--faint)">Sin reservas</div>`;
+    } else {
+      zonasToShow.forEach(z=>{
+        const zRes=filtered.filter(r=>r.zonaId===z.id);
+        if(!zRes.length) return;
+        h+=secHdr(z.emoji+' '+z.nombre, zRes.length);
+        h+=zRes.map(r=>resCard(r)).join('');
+      });
+      const noZona=filtered.filter(r=>!zonas.find(z=>z.id===r.zonaId));
+      if(noZona.length){h+=secHdr('📍 Sin zona',noZona.length);h+=noZona.map(r=>resCard(r)).join('');}
+    }
+    return h;
   }
 
-  h+=`<div style="padding:0 14px 14px"><button class="add-btn" onclick="openNewRes()">+ Nueva reserva</button></div>`;
-  list.innerHTML=h;
+  list.innerHTML=buildTurno('mid')+buildTurno('noc')+`<div class="tab-footer"><button class="add-btn" onclick="openNewRes()">+ Nueva reserva</button></div>`;
 }
 
 /* ── DETAIL (direct edit mode) ── */
@@ -738,9 +938,16 @@ function checkCapacity(){
   if(!z){warn.classList.remove('show');return;}
   const pax=parseInt(document.getElementById('e-pax').value)||0;
   const mesas=parseInt(document.getElementById('e-mesas').value)||0;
+  const fecha=document.getElementById('e-fecha').value;
+  const hora=document.getElementById('e-hora').value;
+  const turno=hora?turnoDeHora(hora):'mid';
+  // Mesas ya ocupadas en esa zona+turno+día (excluir la reserva en edición)
+  const yaOcupadas=reservas
+    .filter(r=>r.fecha===fecha&&r.zonaId===zonaId&&turnoDeHora(r.hora)===turno&&r.estado!=='cancelada'&&r.estado!=='libre'&&r.id!==editingId)
+    .reduce((s,r)=>s+(r.mesas||1),0);
   const msgs=[];
-  if(z.mesas&&mesas>z.mesas) msgs.push(`supera el máximo de ${z.mesas} mesas en ${z.nombre}`);
-  if(z.pax&&pax>z.pax)       msgs.push(`supera el aforo de ${z.pax} personas en ${z.nombre}`);
+  if(z.mesas&&(yaOcupadas+mesas)>z.mesas) msgs.push(`supera el máximo de ${z.mesas} mesas en ${z.nombre} (${yaOcupadas} ya ocupadas en este turno)`);
+  if(z.pax&&pax>z.pax) msgs.push(`supera el aforo de ${z.pax} personas en ${z.nombre}`);
   if(msgs.length){
     txt.textContent='Esta reserva '+msgs.join(' y ')+'. Puedes guardarla igualmente.';
     warn.classList.add('show');
@@ -804,9 +1011,10 @@ function confirmDelRes(){
 /* ── ZONAS ── */
 function renderZon(){
   const list=document.getElementById('zon-list');
+  const empty=document.getElementById('zon-empty');
   list.innerHTML=zonas.map(z=>{
     const inactiva=z.activa===false;
-    return`<div style="background:var(--surf);border:1px solid ${inactiva?'var(--brd)':'var(--brd)'};border-radius:10px;padding:12px 14px;margin:0 14px 8px;display:flex;align-items:center;gap:10px;cursor:pointer;opacity:${inactiva?.5:1}" onclick="openEditZona(${z.id})">
+    return`<div style="background:var(--surf);border:1px solid var(--brd);border-radius:10px;padding:12px 14px;margin:0 14px 8px;display:flex;align-items:center;gap:10px;cursor:pointer;opacity:${inactiva?.5:1}" onclick="openEditZona(${z.id})">
       <span style="font-size:20px">${z.emoji}</span>
       <div style="flex:1">
         <div style="display:flex;align-items:center;gap:7px">
@@ -818,6 +1026,7 @@ function renderZon(){
       <span style="color:var(--faint);font-size:18px">›</span>
     </div>`;
   }).join('');
+  if(empty) empty.style.display=zonas.length?'none':'block';
 }
 function openNewZona(){
   editingZonaId=null;
@@ -877,10 +1086,10 @@ function saveZona(){
 function rebuildZonaBar(){
   const bar=document.getElementById('zona-bar');
   if(!bar) return;
-  const activas=zonas.filter(z=>z.activa!==false);
+  const bloqueadas=zonasBlockedHoy();
+  const activas=zonas.filter(z=>z.activa!==false && !bloqueadas.includes(z.id));
   bar.innerHTML=`<div class="zpill act" onclick="setZona('all',this)"><span class="zpill-icon">✦</span><span class="zpill-txt">Todo</span></div>`+
     activas.map(z=>`<div class="zpill" onclick="setZona(${z.id},this)"><span class="zpill-icon">${z.emoji}</span><span class="zpill-txt">${z.nombre}</span></div>`).join('');
-  // If curZona is now inactive, reset to all
   if(curZona!=='all' && !activas.find(z=>z.id===curZona)){
     curZona='all';
   }
@@ -966,10 +1175,318 @@ function pickEmoji(e, el){
   el.classList.add('act');
 }
 
+/* ── EVENTOS DATA ── */
+const TIPOS_EVENTO = {
+  cata:  {label:'Cata',          icon:'🍷', color:'#9b7fd4', bg:'rgba(155,127,212,.15)', bd:'rgba(155,127,212,.4)'},
+  menu:  {label:'Menú especial', icon:'🍽️', color:'#5599bb', bg:'rgba(85,153,187,.15)',  bd:'rgba(85,153,187,.4)'},
+  evento:{label:'Evento',        icon:'🎉', color:'#C5A669', bg:'rgba(197,166,105,.12)', bd:'rgba(197,166,105,.35)'},
+};
+
+let eventos = [
+  {
+    id:200, nombre:'Cata Vinos Rioja', tipo:'cata', fecha:hoyStr(), hora:'20:30',
+    precio:45, aforo:20, zonasIds:[5], img:null,
+    asistentes:[
+      {id:201, nombre:'Carlos Vega',    acomp:1, pagado:true,  metodo:'bizum',    nota:''},
+      {id:202, nombre:'Marta Soler',    acomp:0, pagado:true,  metodo:'visa',     nota:'Vegetariana'},
+      {id:203, nombre:'Juan Herrero',   acomp:2, pagado:false, metodo:null,       nota:''},
+      {id:204, nombre:'Elena Campos',   acomp:1, pagado:true,  metodo:'efectivo', nota:''},
+    ]
+  },
+  {
+    id:210, nombre:'Menú Degustación Primavera', tipo:'menu', fecha:manaStr(), hora:'21:00',
+    precio:65, aforo:16, zonasIds:[4,5], img:null,
+    asistentes:[
+      {id:211, nombre:'Roberto Gil',   acomp:1, pagado:true,  metodo:'transferencia', nota:''},
+      {id:212, nombre:'Sofía Navarro', acomp:0, pagado:false, metodo:null,            nota:'Sin gluten'},
+    ]
+  },
+];
+
+/* ── RENDER EVENTOS ── */
+function renderEventos(){
+  const list=document.getElementById('ev-list');
+  const empty=document.getElementById('ev-empty');
+  if(empty) empty.style.display=eventos.length?'none':'block';
+  list.innerHTML=eventos.map(ev=>{
+    const tipo=TIPOS_EVENTO[ev.tipo]||TIPOS_EVENTO.evento;
+    const zonasBloq=ev.zonasIds.map(id=>zonas.find(z=>z.id===id)).filter(Boolean);
+    const totalPax=ev.asistentes.reduce((s,a)=>s+1+(a.acomp||0),0);
+    const pagados=ev.asistentes.filter(a=>a.pagado).length;
+    const aforoWarn=ev.aforo&&totalPax>ev.aforo;
+    return`<div class="ev-card" onclick="openEvDetail(${ev.id})">
+      <span class="ev-card-icon">${tipo.icon}</span>
+      <div class="ev-card-body">
+        <div class="ev-card-name">${ev.nombre}</div>
+        <div class="ev-card-meta">
+          <span>${formatDayFull(ev.fecha)}${ev.hora?' · '+ev.hora:''}</span>
+          ${ev.precio?`<span>· 💶 ${ev.precio}€ p.p.</span>`:''}
+          ${totalPax?`<span style="${aforoWarn?'color:var(--red)':''}">· 👥 ${totalPax}${ev.aforo?' / '+ev.aforo:''}${aforoWarn?' ⚠️':''}</span>`:''}
+        </div>
+        ${zonasBloq.length?`<div class="ev-card-zonas">${zonasBloq.map(z=>`<span class="ev-zona-tag">${z.emoji} ${z.nombre}</span>`).join('')}</div>`:''}
+      </div>
+      <span style="color:var(--faint);font-size:18px;flex-shrink:0">›</span>
+    </div>`;
+  }).join('');
+}
+
+/* ── OPEN / SAVE EVENTO ── */
+function updateEvTipoIcon(){
+  const t=document.getElementById('ev-tipo').value;
+  const icon=document.getElementById('ev-tipo-icon');
+  if(icon) icon.textContent=TIPOS_EVENTO[t]?.icon||'🎉';
+}
+function getEvTipo(){return document.getElementById('ev-tipo')?.value||'evento';}
+
+function fillEvZonaPills(selectedIds){
+  document.getElementById('ev-zona-pills').innerHTML=zonas.map(z=>
+    `<div class="zona-pill${selectedIds.includes(z.id)?' act':''}" data-zid="${z.id}" onclick="toggleEvZona(${z.id},this)">${z.emoji} ${z.nombre}</div>`
+  ).join('');
+}
+function toggleEvZona(id,el){el.classList.toggle('act');}
+function getEvZonas(){return [...document.querySelectorAll('#ev-zona-pills .zona-pill.act')].map(el=>parseInt(el.dataset.zid));}
+
+let evImgData=null;
+function loadEvImg(input){
+  const file=input.files[0];if(!file)return;
+  // Limit to ~500KB by resizing via canvas
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{
+      const MAX=1200;
+      let w=img.width,h=img.height;
+      if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}
+      const canvas=document.createElement('canvas');
+      canvas.width=w;canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      evImgData=canvas.toDataURL('image/jpeg',0.75);
+      document.getElementById('ev-img-el').src=evImgData;
+      document.getElementById('ev-img-preview').style.display='block';
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+function clearEvImg(){
+  evImgData=null;
+  document.getElementById('ev-img-preview').style.display='none';
+  document.getElementById('ev-img-input').value='';
+}
+
+function openNewEvento(){
+  editingEventoId=null;
+  document.getElementById('ev-modal-title').textContent='Nuevo evento';
+  document.getElementById('btn-del-evento').style.display='none';
+  document.getElementById('del-ev-confirm-row').style.display='none';
+  document.getElementById('ev-nombre').value='';
+  document.getElementById('ev-fecha').value=curDay||hoyStr();
+  document.getElementById('ev-hora').value='';
+  document.getElementById('ev-precio').value='';
+  document.getElementById('ev-aforo').value='';
+  document.getElementById('ev-tipo').value='evento';
+  updateEvTipoIcon();
+  fillEvZonaPills([]);
+  clearEvImg();
+  showModal('ov-evento');
+}
+function openEditEvento(id){
+  const ev=eventos.find(x=>x.id===id);if(!ev)return;
+  editingEventoId=id;
+  document.getElementById('ev-modal-title').textContent='Editar evento';
+  document.getElementById('btn-del-evento').style.display='block';
+  document.getElementById('del-ev-confirm-row').style.display='none';
+  document.getElementById('ev-nombre').value=ev.nombre;
+  document.getElementById('ev-fecha').value=ev.fecha;
+  document.getElementById('ev-hora').value=ev.hora;
+  document.getElementById('ev-precio').value=ev.precio||'';
+  document.getElementById('ev-aforo').value=ev.aforo||'';
+  document.getElementById('ev-tipo').value=ev.tipo||'evento';
+  updateEvTipoIcon();
+  fillEvZonaPills(ev.zonasIds||[]);
+  evImgData=ev.img||null;
+  if(evImgData){document.getElementById('ev-img-el').src=evImgData;document.getElementById('ev-img-preview').style.display='block';}
+  else{document.getElementById('ev-img-preview').style.display='none';}
+  showModal('ov-evento');
+}
+function openEditEventoFromDetail(){
+  closeModal('ov-ev-detail');
+  openEditEvento(currentEventoId);
+}
+function saveEvento(){
+  const nombre=document.getElementById('ev-nombre').value.trim();
+  if(!nombre){toast('Introduce un nombre');return;}
+  const data={
+    nombre,
+    tipo:getEvTipo(),
+    fecha:document.getElementById('ev-fecha').value||hoyStr(),
+    hora:document.getElementById('ev-hora').value,
+    precio:parseFloat(document.getElementById('ev-precio').value)||0,
+    aforo:parseInt(document.getElementById('ev-aforo').value)||0,
+    zonasIds:getEvZonas(),
+    img:evImgData||null,
+    asistentes: editingEventoId ? eventos.find(x=>x.id===editingEventoId)?.asistentes||[] : [],
+  };
+  if(editingEventoId){
+    const ev=eventos.find(x=>x.id===editingEventoId);
+    if(ev) Object.assign(ev,data);
+  } else {
+    eventos.push({id:++nid,...data});
+  }
+  closeModal('ov-evento');
+  renderEventos();
+  rebuildZonaBar(); // zona blocking may have changed
+  toast(editingEventoId?'Evento actualizado ✓':'Evento creado ✓');
+}
+function delEvento(){
+  document.getElementById('btn-del-evento').style.display='none';
+  document.getElementById('del-ev-confirm-row').style.display='block';
+}
+function cancelDelEvento(){
+  document.getElementById('del-ev-confirm-row').style.display='none';
+  document.getElementById('btn-del-evento').style.display='block';
+}
+function confirmDelEvento(){
+  if(!editingEventoId)return;
+  eventos=eventos.filter(x=>x.id!==editingEventoId);
+  closeModal('ov-evento');
+  renderEventos();
+  rebuildZonaBar();
+  toast('Evento eliminado');
+}
+
+/* ── EVENTO DETAIL ── */
+function renderEvStats(ev){
+  const totalPax=ev.asistentes.reduce((s,a)=>s+1+(a.acomp||0),0);
+  const pagados=ev.asistentes.filter(a=>a.pagado).reduce((s,a)=>s+1+(a.acomp||0),0);
+  const totalEur=ev.precio?(totalPax*ev.precio).toFixed(0):null;
+  const pagadoEur=ev.precio?(pagados*ev.precio).toFixed(0):null;
+  const aforoWarn=ev.aforo&&totalPax>ev.aforo;
+  document.getElementById('evd-stats').innerHTML=`
+    <div class="info-box"><div class="info-val">${ev.asistentes.length}</div><div class="info-lbl">registros</div></div>
+    <div class="info-box"><div class="info-val" style="${aforoWarn?'color:var(--red)':''}">${totalPax}${ev.aforo?'<span style="font-size:11px;color:var(--dim)"> / '+ev.aforo+'</span>':''}</div><div class="info-lbl">personas${aforoWarn?' ⚠️':''}</div></div>
+    ${totalEur?`<div class="info-box"><div class="info-val" style="font-size:14px">${pagadoEur}€<span style="font-size:11px;color:var(--dim)">/${totalEur}€</span></div><div class="info-lbl">cobrado</div></div>`:`<div class="info-box"><div class="info-val">—</div><div class="info-lbl">precio</div></div>`}
+  `;
+}
+function openEvDetail(id){
+  const ev=eventos.find(x=>x.id===id);if(!ev)return;
+  currentEventoId=id;
+  const tipo=TIPOS_EVENTO[ev.tipo]||TIPOS_EVENTO.evento;
+  document.getElementById('evd-nombre').textContent=ev.nombre;
+  document.getElementById('evd-sub').textContent=tipo.label+' · '+formatDayFull(ev.fecha)+(ev.hora?' · '+ev.hora:'');
+  const imgWrap=document.getElementById('evd-img-wrap');
+  if(ev.img){document.getElementById('evd-img').src=ev.img;imgWrap.style.display='block';}
+  else{imgWrap.style.display='none';}
+  renderEvStats(ev);
+  renderAsistentes(ev);
+  showModal('ov-ev-detail');
+}
+function renderAsistentes(ev){
+  const METODO_ICON={efectivo:'💵',visa:'💳',bizum:'📱',transferencia:'🏦'};
+  document.getElementById('evd-asistentes').innerHTML=ev.asistentes.map(a=>{
+    const acompStr=a.acomp?` +${a.acomp}`:'';
+    const metodo=a.pagado&&a.metodo?` · ${METODO_ICON[a.metodo]||''} ${a.metodo}`:'';
+    const pagStyle=a.pagado
+      ?'background:rgba(60,140,70,.15);color:#4a9a5a'
+      :'background:rgba(180,130,0,.15);color:#c89030';
+    return`<div class="asi-row" onclick="openEditAsistente(${ev.id},${a.id})">
+      <div class="asi-info">
+        <div class="asi-name">${a.nombre}${acompStr}</div>
+        ${a.nota?`<div class="asi-sub">${a.nota}</div>`:''}
+      </div>
+      <span class="asi-pago" style="${pagStyle}">${a.pagado?'Pagado'+metodo:'Pendiente'}</span>
+    </div>`;
+  }).join('')||`<div style="text-align:center;padding:16px;font-size:12px;color:var(--faint)">Sin asistentes aún</div>`;
+}
+function openImgFull(){
+  const ev=eventos.find(x=>x.id===currentEventoId);
+  if(!ev||!ev.img)return;
+  document.getElementById('img-full-el').src=ev.img;
+  showModal('ov-img-full');
+}
+
+/* ── ASISTENTES ── */
+function selectAsiPago(p,el){
+  document.querySelectorAll('#asi-pago-pills .zona-pill').forEach(x=>x.classList.remove('act'));
+  el.classList.add('act');
+  document.getElementById('asi-metodo-wrap').style.display=p==='pagado'?'block':'none';
+}
+function selectAsiMetodo(m,el){
+  document.querySelectorAll('#asi-metodo-pills .zona-pill').forEach(x=>x.classList.remove('act'));
+  el.classList.add('act');
+}
+function getAsiPago(){return document.querySelector('#asi-pago-pills .zona-pill.act')?.dataset.p||'pendiente';}
+function getAsiMetodo(){return document.querySelector('#asi-metodo-pills .zona-pill.act')?.dataset.m||null;}
+
+function openNewAsistente(){
+  editingAsiId=null;
+  document.getElementById('asi-modal-title').textContent='Nuevo asistente';
+  document.getElementById('asi-nombre').value='';
+  document.getElementById('asi-acomp').value='0';
+  document.getElementById('btn-del-asi').style.display='none';
+  document.querySelectorAll('#asi-pago-pills .zona-pill').forEach(p=>p.classList.remove('act'));
+  document.querySelector('#asi-pago-pills [data-p="pendiente"]').classList.add('act');
+  document.querySelectorAll('#asi-metodo-pills .zona-pill').forEach(p=>p.classList.remove('act'));
+  document.getElementById('asi-metodo-wrap').style.display='none';
+  document.getElementById('asi-nota').value='';
+  showModal('ov-asistente');
+}
+function openEditAsistente(evId,aId){
+  const ev=eventos.find(x=>x.id===evId);if(!ev)return;
+  const a=ev.asistentes.find(x=>x.id===aId);if(!a)return;
+  editingAsiId=aId;
+  document.getElementById('asi-modal-title').textContent=a.nombre;
+  document.getElementById('asi-nombre').value=a.nombre;
+  document.getElementById('asi-acomp').value=a.acomp||0;
+  document.getElementById('btn-del-asi').style.display='block';
+  document.querySelectorAll('#asi-pago-pills .zona-pill').forEach(p=>p.classList.remove('act'));
+  document.querySelector(`#asi-pago-pills [data-p="${a.pagado?'pagado':'pendiente'}"]`).classList.add('act');
+  document.getElementById('asi-metodo-wrap').style.display=a.pagado?'block':'none';
+  document.querySelectorAll('#asi-metodo-pills .zona-pill').forEach(p=>p.classList.remove('act'));
+  if(a.metodo) document.querySelector(`#asi-metodo-pills [data-m="${a.metodo}"]`)?.classList.add('act');
+  document.getElementById('asi-nota').value=a.nota||'';
+  showModal('ov-asistente');
+}
+function saveAsistente(){
+  const nombre=document.getElementById('asi-nombre').value.trim();
+  if(!nombre){toast('Introduce un nombre');return;}
+  const ev=eventos.find(x=>x.id===currentEventoId);if(!ev)return;
+  const pagado=getAsiPago()==='pagado';
+  const data={nombre, acomp:parseInt(document.getElementById('asi-acomp').value)||0, pagado, metodo:pagado?getAsiMetodo():null, nota:document.getElementById('asi-nota').value.trim()};
+  if(editingAsiId){
+    const a=ev.asistentes.find(x=>x.id===editingAsiId);
+    if(a) Object.assign(a,data);
+  } else {
+    ev.asistentes.push({id:++nid,...data});
+  }
+  closeModal('ov-asistente');
+  renderEvStats(ev);
+  renderAsistentes(ev);
+  renderEventos();
+  toast(editingAsiId?'Asistente actualizado ✓':'Asistente añadido ✓');
+}
+function confirmDelAsistente(){
+  const ev=eventos.find(x=>x.id===currentEventoId);if(!ev)return;
+  ev.asistentes=ev.asistentes.filter(x=>x.id!==editingAsiId);
+  closeModal('ov-asistente');
+  renderEvStats(ev);
+  renderAsistentes(ev);
+  renderEventos();
+  toast('Asistente eliminado');
+}
+
+/* ── ZONA BLOCKING — eventos bloquean zonas en su turno ── */
+function zonasBlockedHoy(){
+  return eventos
+    .filter(ev=>ev.fecha===curDay)
+    .flatMap(ev=>ev.zonasIds||[]);
+}
+
 /* ── INIT ── */
 initDay();
 rebuildZonaBar();
 renderRes();
+renderEventos();
 </script>
 </body>
 </html>
